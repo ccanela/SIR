@@ -1,0 +1,55 @@
+/* Effet “lift” sur chaque carte d’activité */
+.activity-card {
+  transition: all 0.3s ease;
+}
+.activity-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Animation d’apparition des résultats */
+.result-animation {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Contenedor relativo para posicionar el tooltip */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: 125%;               
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  text-align: center;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  transition: opacity 0.2s ease-in-out;
+  z-index: 10;
+}
+
+/* Al hacer hover, mostramos el tooltip */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
