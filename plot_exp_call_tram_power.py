@@ -11,6 +11,9 @@ pio.renderers.default = 'browser'
 
 DATA_DIR = "./data/Experiment_Data/exp_call_tram"
 
+def apply_exponential_moving_average(data, span):
+    smoothed_data = data.ewm(span, adjust=False).mean()
+    return smoothed_data
 
 def parse_power_csv(filepath):
     """
@@ -35,9 +38,11 @@ def parse_power_csv(filepath):
         )
     # Compute combined RF + baseband power
     df['P_RFBB'] = df['P_BB'] + df['P_PA']
+    df['P_RFBB'] = apply_exponential_moving_average(df['P_RFBB'], 10)
+    df['P_BAT'] = apply_exponential_moving_average(df['P_BAT'], 10)
+
     return df[['Timestamp', 'P_BAT', 'P_RFBB']]
-
-
+    
 def display_statistics(df, name):
     """
     Print min, average, and max statistics for battery and RF+BB power.
@@ -79,7 +84,7 @@ def plot_power(df, name):
         go.Scatter(
             x=df['Timestamp'],
             y=df['P_BAT'],
-            mode='lines+markers',
+            mode='lines',
             name='P_BAT (Battery)'
         ), row=1, col=1
     )
@@ -87,7 +92,7 @@ def plot_power(df, name):
         go.Scatter(
             x=df['Timestamp'],
             y=df['P_RFBB'],
-            mode='lines+markers',
+            mode='lines',
             name='P_RFBB (RF+BB)'
         ), row=1, col=1
     )
