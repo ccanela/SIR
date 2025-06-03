@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
         plannedActivities.forEach((activity, index) => {
             const block = document.createElement('div');
             block.className = 'timeline-block absolute h-full rounded-md flex items-center justify-center text-white text-xs font-medium overflow-hidden';
-            block.style.backgroundColor = activityColors[activity.name] || '#6366f1';
+            block.style.backgroundColor = categoryColors[activity.category] || '#6366f1';
             block.style.left = `${(activity.startTime / totalDuration) * 100}%`;
             block.style.width = `${(activity.duration / totalDuration) * 100}%`;
             if (activity.duration >= 5) block.textContent = `${getActivityShortName(activity.name)} (${activity.duration}min)`;
@@ -276,15 +276,10 @@ document.addEventListener('DOMContentLoaded', () => {
     validateCalculateButton();
 });
 
-// --- Activity colors (customize as needed) ---
-const activityColors = {
-    'appel': '#6366f1',
-    'sms': '#06b6d4',
-    'netflix': '#ef4444',
-    'tiktok': '#ec4899',
-    'youtube': '#f59e42',
-    'web': '#10b981',
-    'jeux-casual': '#a78bfa',
-    'jeux-3d': '#fbbf24',
-    'social-media': '#3b82f6'
+const categoryColors = {
+    'communication': '#6366f1',  // Indigo
+    'streaming': '#ef4444',      // Red
+    'short-video': '#3b82f6',     // Blue
+    'autres': '#fbbf24'            // Yellow
 };
+

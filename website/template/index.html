@@ -33,10 +33,45 @@
             <div>
                 <label class="block text-gray-700 font-medium mb-2">Appareil utilisé</label>
                 <select id="device-select" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <option value="smartphone-standard">Smartphone standard</option>
-                    <option value="smartphone-premium">Smartphone haut de gamme</option>
-                    <option value="tablet">Tablette</option>
-                    <option value="laptop">Ordinateur portable</option>
+                    <option value="" disabled selected>Choisissez un smartphone</option>
+                    <option value="autre">Autre</option>
+
+                    <!-- Apple -->
+                    <option value="iphone-15-pro-max">iPhone 15 Pro Max</option>
+                    <option value="iphone-15-pro">iPhone 15 Pro</option>
+                    <option value="iphone-15">iPhone 15</option>
+                    <option value="iphone-14-plus">iPhone 14 Plus</option>
+
+                    <!-- Samsung -->
+                    <option value="samsung-s24-ultra">Samsung Galaxy S24 Ultra</option>
+                    <option value="samsung-s24-plus">Samsung Galaxy S24+</option>
+                    <option value="samsung-s24">Samsung Galaxy S24</option>
+                    <option value="samsung-fold5">Samsung Galaxy Z Fold5</option>
+                    <option value="samsung-flip5">Samsung Galaxy Z Flip5</option>
+
+                    <!-- Google -->
+                    <option value="pixel-8-pro">Google Pixel 8 Pro</option>
+                    <option value="pixel-8">Google Pixel 8</option>
+                    <option value="pixel-7a">Google Pixel 7a</option>
+
+                    <!-- OnePlus -->
+                    <option value="oneplus-12">OnePlus 12</option>
+                    <option value="oneplus-open">OnePlus Open</option>
+
+                    <!-- Xiaomi -->
+                    <option value="xiaomi-14-ultra">Xiaomi 14 Ultra</option>
+                    <option value="xiaomi-14">Xiaomi 14</option>
+
+                    <!-- Oppo / Nothing / Sony -->
+                    <option value="oppo-find-x7">Oppo Find X7 Ultra</option>
+                    <option value="nothing-phone-2">Nothing Phone (2)</option>
+                    <option value="sony-xperia-1-v">Sony Xperia 1 V</option>
+
+                    <!-- Huawei -->
+                    <option value="huawei-p60-pro">Huawei P60 Pro</option>
+                    <option value="huawei-mate-60-pro">Huawei Mate 60 Pro</option>
+                    
+
                 </select>
             </div>
             
@@ -114,7 +149,7 @@
                         </div>
                         <!-- Insta Reels -->
                         <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
-                            data-category="short-video" data-activity="insta-reels" data-consumption="0.4" draggable="true">
+                            data-category="short-video" data-activity="Insta" data-consumption="0.4" draggable="true">
                             <div class="flex items-center">
                                 <div class="bg-purple-100 p-3 rounded-full">
                                     <!-- Instagram SVG (camera) -->
@@ -132,7 +167,7 @@
                         </div>
                         <!-- YT Shorts -->
                         <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
-                            data-category="short-video" data-activity="yt-shorts" data-consumption="0.45" draggable="true">
+                            data-category="short-video" data-activity="YT Shorts" data-consumption="0.45" draggable="true">
                             <div class="flex items-center">
                                 <div class="bg-red-100 p-3 rounded-full">
                                     <!-- YouTube SVG (play button) -->
@@ -170,7 +205,7 @@
                         </div>
                         <!-- SMS/Messagerie -->
                         <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
-                            data-category="communication" data-activity="sms" data-consumption="0.1" draggable="true">
+                            data-category="communication" data-activity="SMS" data-consumption="0.1" draggable="true">
                             <div class="flex items-center">
                                   <div class="bg-green-100 p-3 rounded-full">
                                     <!-- Message SVG -->
@@ -179,7 +214,7 @@
                                     </svg>
                                 </div>
                                 <div class="ml-4">
-                                    <h3 class="font-medium">SMS/Messagerie</h3>
+                                    <h3 class="font-medium">SMS</h3>
                                     <p class="text-sm text-gray-500">0.1 Wh/min</p>
                                 </div>
                             </div>
@@ -208,7 +243,7 @@
                         </div>
                         <!-- Apple TV -->
                         <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
-                            data-category="streaming" data-activity="appletv" data-consumption="0.5" draggable="true">
+                            data-category="streaming" data-activity="AppleTV" data-consumption="0.5" draggable="true">
                             <div class="flex items-center">
                                 <div class="bg-gray-100 p-3 rounded-full">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -223,7 +258,7 @@
                         </div>
                         <!-- Disney+ -->
                         <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
-                            data-category="streaming" data-activity="disneyplus" data-consumption="0.5" draggable="true">
+                            data-category="streaming" data-activity="Disney+" data-consumption="0.5" draggable="true">
                             <div class="flex items-center">
                                 <div class="bg-purple-100 p-3 rounded-full">
                                     <!-- Disney SVG (star) -->
@@ -239,7 +274,7 @@
                         </div>
                         <!-- YouTube -->
                         <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
-                            data-category="streaming" data-activity="youtube" data-consumption="0.45" draggable="true">
+                            data-category="streaming" data-activity="YT" data-consumption="0.45" draggable="true">
                             <div class="flex items-center">
                                 <div class="bg-red-100 p-3 rounded-full">
                                     <!-- YouTube SVG (play button) -->
@@ -256,7 +291,7 @@
                         </div>
                         <!-- Prime Video -->
                         <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
-                            data-category="streaming" data-activity="primevideo" data-consumption="0.5" draggable="true">
+                            data-category="streaming" data-activity="Prime" data-consumption="0.5" draggable="true">
                             <div class="flex items-center">
                                 <div class="bg-blue-100 p-3 rounded-full">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -294,7 +329,7 @@
                         </div>
                         <!-- Spotify -->
                         <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
-                            data-category="autres" data-activity="spotify" data-consumption="0.2" draggable="true">
+                            data-category="autres" data-activity="Spotify" data-consumption="0.2" draggable="true">
                             <div class="flex items-center">
                                 <div class="bg-green-100 p-3 rounded-full">
                                     <!-- Spotify SVG (music note) -->
