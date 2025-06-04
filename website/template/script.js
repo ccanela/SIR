@@ -5,9 +5,15 @@ let totalDuration = 0; // Total simulation time (minutes)
 let plannedActivities = []; // Planned activities array
 let selectedActivity = null;
 
+const categoryColors = {
+    'communication': '#6366f1',  // Indigo
+    'streaming': '#ef4444',      // Red
+    'short-video': '#3b82f6',    // Blue
+    'autres': '#fbbf24'          // Yellow
+};
+
 // DOM Selectors
 document.addEventListener('DOMContentLoaded', () => {
-    // Duration selectors
     const durationButtons = document.querySelectorAll('.duration-btn');
     const customDurationEl = document.getElementById('custom-duration');
     const totalTimeEl = document.getElementById('total-time');
@@ -15,12 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const timeline = document.getElementById('timeline');
     const timelineMarkers = document.getElementById('timeline-markers');
     const emptyTimelineMessage = document.getElementById('empty-timeline-message');
-    // Activity selectors
     const activityCards = document.querySelectorAll('.activity-card');
     const selectedActivityEl = document.getElementById('selected-activity');
     const activityDurationInput = document.getElementById('activity-duration');
     const addActivityBtn = document.getElementById('add-activity-btn');
-    // Simulation controls
     const calculateBtn = document.getElementById('calculate-btn');
     const resetBtn = document.getElementById('reset-btn');
     const results = document.getElementById('results');
@@ -32,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const newSimulation = document.getElementById('new-simulation');
     const mobilityTip = document.getElementById('mobility-tip');
 
-    // --- Duration selection ---
     durationButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             durationButtons.forEach(b => b.classList.remove('bg-indigo-500','text-white'));
@@ -45,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             validateCalculateButton();
         });
     });
+
     customDurationEl.addEventListener('input', () => {
         const v = parseInt(customDurationEl.value, 10);
         if (!isNaN(v) && v > 0) {
@@ -57,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Activity selection ---
     activityCards.forEach(card => {
         card.addEventListener('click', function() {
             activityCards.forEach(c => c.classList.remove('border-indigo-500', 'bg-indigo-50'));
@@ -71,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Add activity to timeline ---
     addActivityBtn.addEventListener('click', function() {
         if (!selectedActivity) return;
         const duration = parseInt(activityDurationInput.value);
@@ -83,16 +85,15 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('La durée dépasse le temps restant disponible');
             return;
         }
-        // Check for category/time conflicts
-        const startTime = getPlannedDuration();
-        const endTime = startTime + duration;
-        for (const activity of plannedActivities) {
-            if ((startTime < activity.endTime && endTime > activity.startTime) &&
-                (activity.category === selectedActivity.category)) {
-                alert('Vous ne pouvez pas utiliser deux activités de la même catégorie simultanément');
-                return;
-            }
+
+        const startTime = findEarliestAvailableSlot(duration);
+        if (startTime === null) {
+            alert('Pas de créneau disponible.');
+            return;
         }
+
+        const endTime = startTime + duration;
+
         plannedActivities.push({
             name: selectedActivity.name,
             category: selectedActivity.category,
@@ -100,12 +101,33 @@ document.addEventListener('DOMContentLoaded', () => {
             startTime: startTime,
             endTime: endTime
         });
+
         updateTimeline();
         updateRemainingTime();
         validateCalculateButton();
     });
 
-    // --- Reset simulation ---
+    function findEarliestAvailableSlot(duration) {
+        const timeline = new Array(totalDuration).fill(null);
+        plannedActivities.forEach(a => {
+            for (let i = a.startTime; i < a.endTime; i++) {
+                timeline[i] = true;
+            }
+        });
+
+        for (let start = 0; start <= totalDuration - duration; start++) {
+            let free = true;
+            for (let i = start; i < start + duration; i++) {
+                if (timeline[i]) {
+                    free = false;
+                    break;
+                }
+            }
+            if (free) return start;
+        }
+        return null;
+    }
+
     resetBtn.addEventListener('click', function() {
         plannedActivities = [];
         selectedActivity = null;
@@ -117,7 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
         validateCalculateButton();
     });
 
-    // --- Calculate (send to backend) ---
     calculateBtn.addEventListener('click', function() {
         if (plannedActivities.length === 0) {
             alert('Veuillez planifier au moins une activité');
@@ -125,9 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const deviceType = document.getElementById('device-select').value;
         const networkType = document.getElementById('network-select').value;
-        const mobility = document.querySelector('input[name="mobility"]:checked').value; // 'static' or 'moving'
+        const mobility = document.querySelector('input[name="mobility"]:checked').value;
 
-        // Prepare payload for backend
         const payload = {
             activities: plannedActivities.map(a => ({
                 name: a.name,
@@ -146,17 +166,16 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(res => res.json())
         .then(data => {
-            // Show results
             totalEnergy.textContent = data.total_energy.toFixed(2);
             co2Equivalent.textContent = data.co2_equivalent.toFixed(2);
             batteryPercentage.textContent = `${Math.min(100, data.battery_percent.toFixed(1))}%`;
             batteryLevel.style.width = `${Math.min(100, data.battery_percent)}%`;
-            // Battery color
+
             batteryLevel.classList.remove('bg-green-500', 'bg-yellow-500', 'bg-red-500');
             if (data.battery_percent < 30) batteryLevel.classList.add('bg-green-500');
             else if (data.battery_percent < 70) batteryLevel.classList.add('bg-yellow-500');
             else batteryLevel.classList.add('bg-red-500');
-            // Activities detail
+
             activitiesDetail.innerHTML = data.activities.map(a => `
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${getActivityFullName(a.name)}</td>
@@ -164,10 +183,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${a.consumption.toFixed(2)} Wh</td>
                 </tr>
             `).join('');
-            // Mobility tip
+
             if (mobility === 'moving') mobilityTip.classList.remove('hidden');
             else mobilityTip.classList.add('hidden');
-            // Show results
+
             results.classList.remove('hidden');
             results.classList.add('result-animation');
             results.scrollIntoView({ behavior: 'smooth' });
@@ -175,28 +194,30 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(err => alert("Erreur lors du calcul : " + err));
     });
 
-    // --- New simulation ---
     newSimulation.addEventListener('click', function() {
         results.classList.add('hidden');
         resetBtn.click();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // --- Utility functions ---
     function updateTotalTime() {
         totalTimeEl.textContent = totalDuration;
     }
+
     function updateRemainingTime() {
         const remaining = getRemainingTime();
         remainingTimeEl.textContent = remaining;
         if (selectedActivity) addActivityBtn.disabled = remaining <= 0;
     }
+
     function getRemainingTime() {
         return totalDuration - getPlannedDuration();
     }
+
     function getPlannedDuration() {
         return plannedActivities.reduce((total, activity) => total + activity.duration, 0);
     }
+
     function updateTimeline() {
         timeline.innerHTML = '';
         timelineMarkers.innerHTML = '';
@@ -205,6 +226,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         emptyTimelineMessage.classList.add('hidden');
+
+        plannedActivities.sort((a, b) => a.startTime - b.startTime);
+
         plannedActivities.forEach((activity, index) => {
             const block = document.createElement('div');
             block.className = 'timeline-block absolute h-full rounded-md flex items-center justify-center text-white text-xs font-medium overflow-hidden';
@@ -212,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
             block.style.left = `${(activity.startTime / totalDuration) * 100}%`;
             block.style.width = `${(activity.duration / totalDuration) * 100}%`;
             if (activity.duration >= 5) block.textContent = `${getActivityShortName(activity.name)} (${activity.duration}min)`;
-            // Delete button
+
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'absolute top-0 right-0 bg-red-600 text-white p-1 rounded-bl-md opacity-0 hover:opacity-100 transition-opacity';
             deleteBtn.innerHTML = '×';
@@ -226,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
             block.appendChild(deleteBtn);
             timeline.appendChild(block);
         });
-        // Timeline markers
+
         const numMarkers = Math.min(totalDuration, 12);
         const step = totalDuration / numMarkers;
         for (let i = 0; i <= numMarkers; i++) {
@@ -237,49 +261,39 @@ document.addEventListener('DOMContentLoaded', () => {
             timelineMarkers.appendChild(marker);
         }
     }
+
     function getActivityFullName(name) {
-        switch(name) {
-            case 'appel': return 'Appel téléphonique';
-            case 'sms': return 'SMS/Messagerie';
-            case 'netflix': return 'Netflix';
-            case 'tiktok': return 'TikTok';
-            case 'youtube': return 'YouTube';
-            case 'web': return 'Navigation Web';
-            case 'jeux-casual': return 'Jeux casual';
-            case 'jeux-3d': return 'Jeux 3D';
-            case 'social-media': return 'Réseaux sociaux';
-            default: return name;
-        }
-    }
-    function getActivityShortName(name) {
-        switch(name) {
-            case 'appel': return 'Appel';
-            case 'sms': return 'SMS';
-            case 'netflix': return 'Netflix';
-            case 'tiktok': return 'TikTok';
-            case 'youtube': return 'YT';
-            case 'web': return 'Web';
-            case 'jeux-casual': return 'Jeu';
-            case 'jeux-3d': return 'Jeu 3D';
-            case 'social-media': return 'Social';
-            default: return name;
-        }
-    }
-    function validateCalculateButton() {
-        calculateBtn.disabled = plannedActivities.length === 0;
+        const map = {
+            'appel': 'Appel téléphonique',
+            'sms': 'SMS/Messagerie',
+            'netflix': 'Netflix',
+            'tiktok': 'TikTok',
+            'youtube': 'YouTube',
+            'web': 'Navigation Web',
+            'jeux-casual': 'Jeux casual',
+            'jeux-3d': 'Jeux 3D',
+            'social-media': 'Réseaux sociaux'
+        };
+        return map[name] || name;
     }
 
-    // --- Initial UI state ---
+    function getActivityShortName(name) {
+        const map = {
+            'appel': 'Appel',
+            'sms': 'SMS',
+            'netflix': 'Netflix',
+            'tiktok': 'TikTok',
+            'youtube': 'YT',
+            'web': 'Web',
+            'jeux-casual': 'Jeu',
+            'jeux-3d': 'Jeu 3D',
+            'social-media': 'Social'
+        };
+        return map[name] || name;
+    }
+
+    validateCalculateButton();
     updateTotalTime();
     updateTimeline();
     updateRemainingTime();
-    validateCalculateButton();
 });
-
-const categoryColors = {
-    'communication': '#6366f1',  // Indigo
-    'streaming': '#ef4444',      // Red
-    'short-video': '#3b82f6',     // Blue
-    'autres': '#fbbf24'            // Yellow
-};
-
