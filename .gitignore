@@ -1,0 +1,39 @@
+# === Node.js ===
+node_modules/
+package-lock.json
+.env
+npm-debug.log*
+
+# === Python / Flask (legacy cleanup) ===
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env/
+venv/
+*.sqlite3
+
+# === OS Junk ===
+.DS_Store
+Thumbs.db
+
+# === Editor / IDE Files ===
+.vscode/
+.idea/
+*.swp
+
+# === Build / Cache ===
+.cache/
+dist/
+build/
+
+# === Frontend Local Build Artifacts (if used later) ===
+client/dist/
+client/.parcel-cache/
+client/.next/
+client/.nuxt/
+
+# === Logs ===
+*.log
+
+# === Misc ===
+*.bak
