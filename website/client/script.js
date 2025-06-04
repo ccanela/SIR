@@ -262,8 +262,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function getActivityFullName(name) {
         const map = {
             'tiktok': 'TikTok',
-            'Insta': 'Insta Reels',
-            'YT Shorts': 'YouTube Shorts',
+            'insta': 'Insta Reels',
+            'YTshorts': 'YouTube Shorts',
             'appel': 'Appel téléphonique',
             'SMS': 'SMS/Messagerie',
             'netflix': 'Netflix',
@@ -281,8 +281,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function getActivityShortName(name) {
         const map = {
             'tiktok': 'TikTok',
-            'Insta': 'Reels',
-            'YT Shorts': 'Shorts',
+            'insta': 'Reels',
+            'YTshorts': 'Shorts',
             'appel': 'Appel',
             'SMS': 'SMS',
             'netflix': 'Netflix',
