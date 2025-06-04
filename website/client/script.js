@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const co2Equivalent = document.getElementById('co2-equivalent');
     const activitiesDetail = document.getElementById('activities-detail');
     const newSimulation = document.getElementById('new-simulation');
-    const mobilityTip = document.getElementById('mobility-tip');
 
     durationButtons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -166,8 +165,12 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(res => res.json())
         .then(data => {
+            results.classList.remove('hidden');
+            results.scrollIntoView({ behavior: 'smooth' });
+
             totalEnergy.textContent = data.total_energy.toFixed(2);
-            co2Equivalent.textContent = data.co2_equivalent.toFixed(2);
+            co2Equivalent.textContent = `${data.co2_min.toFixed(1)} – ${data.co2_max.toFixed(1)}`;
+
             batteryPercentage.textContent = `${Math.min(100, data.battery_percent.toFixed(1))}%`;
             batteryLevel.style.width = `${Math.min(100, data.battery_percent)}%`;
 
@@ -184,12 +187,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 </tr>
             `).join('');
 
-            if (mobility === 'moving') mobilityTip.classList.remove('hidden');
-            else mobilityTip.classList.add('hidden');
-
-            results.classList.remove('hidden');
-            results.classList.add('result-animation');
-            results.scrollIntoView({ behavior: 'smooth' });
         })
         .catch(err => alert("Erreur lors du calcul : " + err));
     });
@@ -262,44 +259,48 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-function getActivityFullName(name) {
-    const map = {
-        'tiktok': 'TikTok',
-        'Insta': 'Insta Reels',
-        'YT Shorts': 'YouTube Shorts',
-        'appel': 'Appel téléphonique',
-        'SMS': 'SMS/Messagerie',
-        'netflix': 'Netflix',
-        'AppleTV': 'Apple TV',
-        'Disney+': 'Disney+',
-        'YT': 'YouTube',
-        'Prime': 'Prime Video',
-        'web': 'Navigation Web',
-        'Spotify': 'Spotify',
-        'jeux-casual': 'Jeux Casual'
-    };
-    return map[name] || name;
-}
+    function getActivityFullName(name) {
+        const map = {
+            'tiktok': 'TikTok',
+            'Insta': 'Insta Reels',
+            'YT Shorts': 'YouTube Shorts',
+            'appel': 'Appel téléphonique',
+            'SMS': 'SMS/Messagerie',
+            'netflix': 'Netflix',
+            'AppleTV': 'Apple TV',
+            'Disney+': 'Disney+',
+            'YT': 'YouTube',
+            'Prime': 'Prime Video',
+            'web': 'Navigation Web',
+            'Spotify': 'Spotify',
+            'jeux-casual': 'Jeux Casual'
+        };
+        return map[name] || name;
+    }
 
-function getActivityShortName(name) {
-    const map = {
-        'tiktok': 'TikTok',
-        'Insta': 'Reels',
-        'YT Shorts': 'Shorts',
-        'appel': 'Appel',
-        'SMS': 'SMS',
-        'netflix': 'Netflix',
-        'AppleTV': 'AppleTV',
-        'Disney+': 'Disney+',
-        'YT': 'YT',
-        'Prime': 'Prime',
-        'web': 'Web',
-        'Spotify': 'Spotify',
-        'jeux-casual': 'Casual'
-    };
-    return map[name] || name;
-}
+    function getActivityShortName(name) {
+        const map = {
+            'tiktok': 'TikTok',
+            'Insta': 'Reels',
+            'YT Shorts': 'Shorts',
+            'appel': 'Appel',
+            'SMS': 'SMS',
+            'netflix': 'Netflix',
+            'AppleTV': 'AppleTV',
+            'Disney+': 'Disney+',
+            'YT': 'YT',
+            'Prime': 'Prime',
+            'web': 'Web',
+            'Spotify': 'Spotify',
+            'jeux-casual': 'Jeux'
+        };
+        return map[name] || name;
+    }
 
+    function validateCalculateButton() {
+        const calculateBtn = document.getElementById('calculate-btn');
+        calculateBtn.disabled = plannedActivities.length === 0 || totalDuration === 0;
+    }
 
     validateCalculateButton();
     updateTotalTime();
