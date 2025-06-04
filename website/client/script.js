@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mobility: mobility
         };
 
-        fetch('/calculate', {
+        fetch('http://localhost:5000/calculate', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(payload)
