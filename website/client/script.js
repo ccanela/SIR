@@ -9,6 +9,7 @@ const categoryColors = {
     'communication': '#6366f1',  // Indigo
     'streaming': '#ef4444',      // Red
     'short-video': '#3b82f6',    // Blue
+    'visio':'#008000',           // Green
     'autres': '#fbbf24'          // Yellow
 };
 
@@ -261,10 +262,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getActivityFullName(name) {
         const map = {
+            'teams': 'Microsoft Teams',
+            'meet': 'Google Meet',
+            'zoom':'Zoom',
             'tiktok': 'TikTok',
             'insta': 'Insta Reels',
             'YTshorts': 'YouTube Shorts',
-            'appel': 'Appel téléphonique',
+            'call': 'Appel téléphonique',
             'SMS': 'SMS/Messagerie',
             'netflix': 'Netflix',
             'AppleTV': 'Apple TV',
@@ -280,10 +284,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getActivityShortName(name) {
         const map = {
+            'teams':'Teams',
+            'zoom':'Zoom',
+            'meet':'Meet',
             'tiktok': 'TikTok',
             'insta': 'Reels',
             'YTshorts': 'Shorts',
-            'appel': 'Appel',
+            'call': 'Appel',
             'SMS': 'SMS',
             'netflix': 'Netflix',
             'AppleTV': 'AppleTV',
