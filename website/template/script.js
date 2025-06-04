@@ -262,35 +262,44 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function getActivityFullName(name) {
-        const map = {
-            'appel': 'Appel téléphonique',
-            'sms': 'SMS/Messagerie',
-            'netflix': 'Netflix',
-            'tiktok': 'TikTok',
-            'youtube': 'YouTube',
-            'web': 'Navigation Web',
-            'jeux-casual': 'Jeux casual',
-            'jeux-3d': 'Jeux 3D',
-            'social-media': 'Réseaux sociaux'
-        };
-        return map[name] || name;
-    }
+function getActivityFullName(name) {
+    const map = {
+        'tiktok': 'TikTok',
+        'Insta': 'Insta Reels',
+        'YT Shorts': 'YouTube Shorts',
+        'appel': 'Appel téléphonique',
+        'SMS': 'SMS/Messagerie',
+        'netflix': 'Netflix',
+        'AppleTV': 'Apple TV',
+        'Disney+': 'Disney+',
+        'YT': 'YouTube',
+        'Prime': 'Prime Video',
+        'web': 'Navigation Web',
+        'Spotify': 'Spotify',
+        'jeux-casual': 'Jeux Casual'
+    };
+    return map[name] || name;
+}
 
-    function getActivityShortName(name) {
-        const map = {
-            'appel': 'Appel',
-            'sms': 'SMS',
-            'netflix': 'Netflix',
-            'tiktok': 'TikTok',
-            'youtube': 'YT',
-            'web': 'Web',
-            'jeux-casual': 'Jeu',
-            'jeux-3d': 'Jeu 3D',
-            'social-media': 'Social'
-        };
-        return map[name] || name;
-    }
+function getActivityShortName(name) {
+    const map = {
+        'tiktok': 'TikTok',
+        'Insta': 'Reels',
+        'YT Shorts': 'Shorts',
+        'appel': 'Appel',
+        'SMS': 'SMS',
+        'netflix': 'Netflix',
+        'AppleTV': 'AppleTV',
+        'Disney+': 'Disney+',
+        'YT': 'YT',
+        'Prime': 'Prime',
+        'web': 'Web',
+        'Spotify': 'Spotify',
+        'jeux-casual': 'Casual'
+    };
+    return map[name] || name;
+}
+
 
     validateCalculateButton();
     updateTotalTime();
