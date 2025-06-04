@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const co2Equivalent = document.getElementById('co2-equivalent');
     const activitiesDetail = document.getElementById('activities-detail');
     const newSimulation = document.getElementById('new-simulation');
-    const mobilityTip = document.getElementById('mobility-tip');
 
     durationButtons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -188,8 +187,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 </tr>
             `).join('');
 
-            if (mobility === 'moving') mobilityTip.classList.remove('hidden');
-            else mobilityTip.classList.add('hidden');
         })
         .catch(err => alert("Erreur lors du calcul : " + err));
     });
