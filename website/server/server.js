@@ -38,16 +38,27 @@ app.post('/calculate', (req, res) => {
   }
 
   const batteryPercent = Math.min(100, (totalEnergy / 15) * 100);
-  const co2Equivalent = totalEnergy * 0.012;
+  // Convert Wh → kWh
+    const energy_kWh = totalEnergy / 1000;
+    const co2Min = energy_kWh * 50; // ADEME
+    const co2Max = energy_kWh * 60; // RTE
 
-  res.json({
+    // Send both min and max
+    res.json({
     total_energy: totalEnergy,
     battery_percent: batteryPercent,
-    co2_equivalent: co2Equivalent,
+    co2_min: co2Min,
+    co2_max: co2Max,
     activities: details
-  });
+    });
+}
+);
+app.get('/', (req, res) => {
+  res.send('✅ Hello from the energy simulator backend!');
 });
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
+
+
 });
