@@ -59,9 +59,7 @@ app.post('/calculate', (req, res) => {
     const match = energyTable.find(entry => entry.scenario_id === scenarioKey);
 
     if (match) {
-      const rate = parseFloat(match.E_BAT_Jm);
-      console.log("EBAT "+match.E_BAT_Jm)
-      console.log("duree "+activity.duration)
+      const rate = match ? (parseFloat(match.E_BAT_Jm) / 3600) : 0.3; // Convert J/min → Wh/min
       const consumption = rate * activity.duration;
       totalEnergy += consumption;
 
@@ -85,7 +83,7 @@ app.post('/calculate', (req, res) => {
 
   console.log(`⚡ Total Energy: ${totalEnergy.toFixed(2)} Wh`);
   console.log(`🔋 Battery %: ${batteryPercent.toFixed(1)}%`);
-  console.log(`🌍 CO2 Equivalent: ${co2Equivalent.toFixed(2)} g`);
+  console.log(`🌍 CO2 min: ${co2Min.toFixed(2)} g`);
   console.log(`--- End calculation ---\n`);
 
   res.json({
