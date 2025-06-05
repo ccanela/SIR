@@ -589,7 +589,66 @@
   </button>
 </div>
 
-<!-- Modale CO₂ -->
+<!-- Modale CO₂ stylée avec icônes -->
+<div id="co2-info-modal" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden flex items-center justify-center">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-8 relative text-gray-800 font-sans">
+    <button onclick="document.getElementById('co2-info-modal').classList.add('hidden')" class="absolute top-3 right-4 text-gray-400 hover:text-red-500 text-2xl font-bold">&times;</button>
+
+    <h3 class="text-2xl font-semibold mb-6 text-center text-indigo-700">Comment cette estimation est-elle faite ?</h3>
+
+    <p class="text-base leading-relaxed text-gray-700 mb-4">
+      Cette estimation est basée sur la consommation électrique réelle de votre appareil (en kWh) multipliée par le facteur d’émission moyen en France.
+    </p>
+
+    <div class="flex justify-around items-center text-center my-6 space-x-4">
+    <!-- Nucléaire -->
+    <div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-2" viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="30" fill="#E0E7FF" />
+        <ellipse cx="32" cy="40" rx="12" ry="8" fill="#6366F1" />
+        <circle cx="32" cy="32" r="8" fill="#a5b4fc" />
+        <rect x="28" y="20" width="8" height="16" rx="4" fill="#6366F1" />
+        </svg>
+        <p class="text-xl font-bold">60%</p>
+        <p class="text-sm text-gray-600">Nucléaire</p>
+    </div>
+
+    <!-- Renouvelable -->
+    <div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-2" viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="30" fill="#A7F3D0" />
+        <path d="M32 12v20l16 8" stroke="#059669" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M32 32c-8 0-12 8-12 8" stroke="#059669" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+        <p class="text-xl font-bold">20%</p>
+        <p class="text-sm text-gray-600">Renouvelable</p>
+    </div>
+
+    <!-- Fossile -->
+    <div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-2" viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="30" fill="#FCD34D" />
+        <path d="M20 38 L20 28 L28 28 L28 38 L32 34 L36 38 L36 26 L44 26 L44 38 Z" fill="#92400e" />
+        <circle cx="24" cy="34" r="2" fill="#fff"/>
+        <circle cx="32" cy="34" r="2" fill="#fff"/>
+        <circle cx="40" cy="34" r="2" fill="#fff"/>
+        <path d="M40 18c-1-2 1-3 1-5s-3-2-2-4" stroke="#92400e" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <p class="text-xl font-bold">20%</p>
+        <p class="text-sm text-gray-600">Fossile</p>
+    </div>
+    </div>
+
+
+    <p class="text-base text-gray-700 mb-2">
+      Les émissions moyennes sont estimées entre <strong>50 et 60 g CO₂ par kWh</strong> selon les sources (ADEME, RTE).
+    </p>
+    <p class="text-sm italic text-gray-500">
+      L’intervalle affiché reflète cette incertitude entre les différentes méthodes de calcul.
+    </p>
+  </div>
+</div>
+
 <div id="co2-info-modal" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden flex items-center justify-center">
   <div class="bg-white rounded-xl shadow-lg max-w-md p-6 relative">
     <button onclick="document.getElementById('co2-info-modal').classList.add('hidden')" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600">&times;</button>
