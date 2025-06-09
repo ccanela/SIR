@@ -31,18 +31,6 @@ fs.createReadStream('scenario_summary_df.csv')  // Assuming it's in the server f
   });
 
 
-// Simulated energy table (replace with DB later)
-const ENERGY_TABLE = {
-  'netflix|wifi|stat': 0.5,
-  'appel|5g|dyn': 0.35,
-  'SMS|wifi|stat': 0.1,
-  'YT|4g|stat': 0.45,
-  'Spotify|wifi|stat': 0.2,
-  'web|wifi|stat': 0.25,
-  'tiktok|5g|dyn': 0.4,
-  'Insta|4g|dyn': 0.4,
-  'Prime|wifi|stat': 0.5,
-};
 
 app.post('/calculate', (req, res) => {
   const { device, network, mobility, activities = [] } = req.body;
@@ -60,19 +48,19 @@ app.post('/calculate', (req, res) => {
     const match = energyTable.find(entry => entry.scenario_id === scenarioKey);
 
     if (match) {
-      const rate = match ? (parseFloat(match.E_BAT_Jm) / 3600) : 0.3; // Convert J/min → Wh/min
+      const rate = parseFloat(match.E_BAT_Jm) / 3600;
       const consumption = rate * activity.duration;
       totalEnergy += consumption;
-
-      console.log(`✅ Match found for "${scenarioKey}" → E_BAT_Jm = ${match.E_BAT_Jm}`);
-      details.push({ ...activity, consumption });
+      details.push({ ...activity, consumption, fallback: false });
     } else {
-      const fallbackRate = 0.3;
-      const consumption = fallbackRate * activity.duration;
-      totalEnergy += consumption;
-
-      console.warn(`❌ No match for "${scenarioKey}" → using fallback rate ${fallbackRate} Wh/min`);
-      details.push({ ...activity, consumption });
+      // Do not compute or fallback – just record as missing
+      details.push({
+        ...activity,
+        consumption: 0,
+        fallback: true,
+        network,
+        mobility
+      });
     }
   }
 
