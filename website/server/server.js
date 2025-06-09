@@ -44,8 +44,13 @@ app.post('/calculate', (req, res) => {
   const details = [];
 
   for (const activity of activities) {
-    const scenarioKey = `${deviceName}_${network}_${activity.name}_${condition}`;
-    const match = energyTable.find(entry => entry.scenario_id === scenarioKey);
+    let scenarioKey = `${deviceName}_${network}_${activity.name}_${condition}`;
+    let match = energyTable.find(entry => entry.scenario_id === scenarioKey);
+
+    if (!match) {
+      scenarioKey = `6pro_${network}_${activity.name}_${condition}`;
+      match = energyTable.find(entry => entry.scenario_id === scenarioKey);
+    }
 
     if (match) {
       const rate = parseFloat(match.E_BAT_Jm) / 3600;
