@@ -126,7 +126,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const deviceType = document.getElementById('device-select').value;
         const networkType = document.getElementById('network-select').value;
         const mobility = document.querySelector('input[name="mobility"]:checked').value;
-
         const payload = {
             activities: plannedActivities.map(a => ({
                 name: a.name,
@@ -137,7 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
             network: networkType,
             mobility: mobility
         };
-
         fetch('http://localhost:5000/calculate', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -145,35 +143,40 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(res => res.json())
         .then(data => {
-            const missing = data.activities.filter(a => a.fallback);
-
+            console.log("🧪 Server response:", data); // Debug log
+        
+            const missing = data.activities.filter(a => a.fallback === true);
+        
             if (missing.length > 0) {
-                document.getElementById('results').classList.add('hidden');
+                console.log("🚨 Missing scenarios:", missing);
+                results.classList.add('hidden');
+        
                 const list = document.getElementById('missing-combinations');
                 list.innerHTML = '';
                 missing.forEach(m => {
-                const li = document.createElement('li');
-                li.textContent = `${getActivityFullName(m.name)} - ${m.network.toUpperCase()} - ${m.mobility === 'moving' ? 'En déplacement' : 'Stationnaire'}`;
-                list.appendChild(li);
+                    const li = document.createElement('li');
+                    li.textContent = `${getActivityFullName(m.name)} - ${m.network.toUpperCase()} - ${m.mobility === 'moving' ? 'En déplacement' : 'Stationnaire'}`;
+                    list.appendChild(li);
                 });
+        
                 document.getElementById('no-data-popup').classList.remove('hidden');
-                return;
+                console.log("caca")
             }
-
+        
             results.classList.remove('hidden');
             results.scrollIntoView({ behavior: 'smooth' });
-
+        
             totalEnergy.textContent = data.total_energy.toFixed(2);
             co2Equivalent.textContent = `${data.co2_min.toFixed(1)} – ${data.co2_max.toFixed(1)}`;
-
+        
             batteryPercentage.textContent = `${Math.min(100, data.battery_percent.toFixed(1))}%`;
             batteryLevel.style.width = `${Math.min(100, data.battery_percent)}%`;
-
+        
             batteryLevel.classList.remove('bg-green-500', 'bg-yellow-500', 'bg-red-500');
             if (data.battery_percent < 30) batteryLevel.classList.add('bg-green-500');
             else if (data.battery_percent < 70) batteryLevel.classList.add('bg-yellow-500');
             else batteryLevel.classList.add('bg-red-500');
-
+        
             activitiesDetail.innerHTML = data.activities.map(a => `
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${getActivityFullName(a.name)}</td>
@@ -182,6 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </tr>
             `).join('');
         })
+        
         .catch(err => alert("Erreur lors du calcul : " + err));
     });
 
