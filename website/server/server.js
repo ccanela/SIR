@@ -53,36 +53,68 @@ app.post('/calculate', (req, res) => {
   const deviceName = device || 'autre';
 
   console.log(`\n--- Calculating energy ---`);
-  console.log(`📱 Device: ${deviceName}, 🌐 Network: ${network}, 🧭 Mobility: ${mobility}`);
-
+  const activityNames = activities.map(a => a.name).join(', ');
+  console.log(`📱 Device: ${deviceName}, 🌐 Network: ${network}, 🧭 Mobility: ${mobility}, 🎯 Activities: [${activityNames}]`);
+  
   let totalEnergy = 0;
   const details = [];
 
   for (const activity of activities) {
-    let scenarioKey = `${deviceName}_${network}_${activity.name}_${condition}`;
-    let match = energyTable.find(entry => entry.scenario_id === scenarioKey);
-
-    if (!match) {
-      scenarioKey = `6pro_${network}_${activity.name}_${condition}`;
-      match = energyTable.find(entry => entry.scenario_id === scenarioKey);
+    //–– normalize keys for case-insensitive matching
+    const devKey   = deviceName.toLowerCase();
+    const actKey   = activity.name.toLowerCase();
+    const condKey  = condition.toLowerCase();
+    const netLower = network.toLowerCase();
+  
+    //–– allow “4g” ⇄ “lte” synonyms
+    const netVariants = [netLower];
+    if (netLower === '4g')      netVariants.push('lte');
+    else if (netLower === 'lte') netVariants.push('4g');
+  
+    let match        = null;
+    let scenarioKey  = '';
+  
+    //–– try user’s device first
+    for (const nv of netVariants) {
+      const key = `${devKey}_${nv}_${actKey}_${condKey}`;
+      scenarioKey = key;
+      match = energyTable.find(e => 
+        e.scenario_id.toLowerCase() === key
+      );
+      if (match) break;
     }
-
+  
+    //–– fallback to 6pro if no match
+    if (!match) {
+      for (const nv of netVariants) {
+        const key = `6pro_${nv}_${actKey}_${condKey}`;
+        scenarioKey = key;
+        match = energyTable.find(e => 
+          e.scenario_id.toLowerCase() === key
+        );
+        if (match) break;
+      }
+    }
+  
+    console.log(`Scenario Key: ${scenarioKey}`);
+  
     if (match) {
-      const rate = parseFloat(match.E_BAT_Jm) / 3600;
+      console.log("found E_BAT "+match.E_BAT_Jm)
+      const rate        = parseFloat(match.E_BAT_Jm) / 3600;
       const consumption = rate * activity.duration;
-      totalEnergy += consumption;
+      totalEnergy     += consumption;
       details.push({ ...activity, consumption, fallback: false });
     } else {
-      // Do not compute or fallback – just record as missing
       details.push({
         ...activity,
         consumption: 0,
-        fallback: true,
+        fallback:    true,
         network,
         mobility
       });
     }
   }
+  
 
   const baseDevice = '6pro';
   const userKey = deviceName.toLowerCase();
@@ -116,51 +148,11 @@ app.post('/calculate', (req, res) => {
     });
 }
 );
+
 app.get('/', (req, res) => {
   res.send('✅ Hello from the energy simulator backend!');
 });
 
-
-// app.get('/', (req, res) => {
-//   res.send('✅ Hello from the energy simulator backend!');
-// });
-
-// app.post('/calculate', (req, res) => {
-//   const { device, network, mobility, activities = [] } = req.body;
-//   const condition = mobility === 'moving' ? 'Dyna' : 'stat';
-//   const deviceName = device || 'autre';
-
-//   let totalEnergy = 0;
-//   const details = [];
-
-//   for (const activity of activities) {
-//     const actName = activity.name.toLowerCase();
-//     const match = energyTable.find(entry =>
-//       entry.device.toLowerCase().includes(deviceName.toLowerCase()) &&
-//       entry.platform.toLowerCase().includes(actName) &&
-//       entry.ran_technology.toLowerCase() === network.toLowerCase() &&
-//       entry.condition.toLowerCase() === condition.toLowerCase()
-//     );
-
-//     const rate = match ? parseFloat(match.e_bat_jm || 0.3) : 0.3;
-//     const consumption = rate * activity.duration;
-//     totalEnergy += consumption;
-//     details.push({ ...activity, consumption });
-//   }
-
-//   const batteryPercent = Math.min(100, (totalEnergy / 15) * 100); // example: 15Wh battery
-//   const co2Equivalent = totalEnergy * 0.012;
-
-//   res.json({
-//     total_energy: totalEnergy,
-//     battery_percent: batteryPercent,
-//     co2_equivalent: co2Equivalent,
-//     activities: details
-//   });
-// });
-
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
-
-
 });

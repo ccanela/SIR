@@ -16,7 +16,6 @@ const categoryColors = {
 // DOM Selectors
 document.addEventListener('DOMContentLoaded', () => {
     const durationButtons = document.querySelectorAll('.duration-btn');
-    const customDurationEl = document.getElementById('custom-duration');
     const totalTimeEl = document.getElementById('total-time');
     const remainingTimeEl = document.getElementById('remaining-time');
     const timeline = document.getElementById('timeline');
@@ -41,24 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
             durationButtons.forEach(b => b.classList.remove('bg-indigo-500','text-white'));
             btn.classList.add('bg-indigo-500','text-white');
             totalDuration = parseInt(btn.dataset.minutes, 10);
-            customDurationEl.value = '';
             updateTotalTime();
             updateTimeline();
-            updateRemainingTime();
             validateCalculateButton();
         });
-    });
-
-    customDurationEl.addEventListener('input', () => {
-        const v = parseInt(customDurationEl.value, 10);
-        if (!isNaN(v) && v > 0) {
-            totalDuration = v;
-            durationButtons.forEach(b => b.classList.remove('bg-indigo-500','text-white'));
-            updateTotalTime();
-            updateTimeline();
-            updateRemainingTime();
-            validateCalculateButton();
-        }
     });
 
     activityCards.forEach(card => {
@@ -70,19 +55,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 category: this.dataset.category
             };
             selectedActivityEl.textContent = getActivityFullName(selectedActivity.name);
-            addActivityBtn.disabled = getRemainingTime() <= 0;
         });
     });
 
     addActivityBtn.addEventListener('click', function() {
         if (!selectedActivity) return;
         const duration = parseInt(activityDurationInput.value);
+        console.log("activity duration parsée en entrée "+duration)
         if (isNaN(duration) || duration <= 0) {
             alert('Veuillez entrer une durée valide');
-            return;
-        }
-        if (duration > getRemainingTime()) {
-            alert('La durée dépasse le temps restant disponible');
             return;
         }
 
@@ -91,9 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Pas de créneau disponible.');
             return;
         }
+        console.log("starttime "+startTime)
 
         const endTime = startTime + duration;
-
+        console.log("endtime "+endTime)
         plannedActivities.push({
             name: selectedActivity.name,
             category: selectedActivity.category,
@@ -103,30 +85,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         updateTimeline();
-        updateRemainingTime();
         validateCalculateButton();
     });
 
     function findEarliestAvailableSlot(duration) {
-        const timeline = new Array(totalDuration).fill(null);
-        plannedActivities.forEach(a => {
-            for (let i = a.startTime; i < a.endTime; i++) {
-                timeline[i] = true;
-            }
-        });
-
-        for (let start = 0; start <= totalDuration - duration; start++) {
-            let free = true;
-            for (let i = start; i < start + duration; i++) {
-                if (timeline[i]) {
-                    free = false;
-                    break;
-                }
-            }
-            if (free) return start;
-        }
-        return null;
+        // Calculate when all existing activities end
+        const usedTime = plannedActivities.reduce((sum, a) => sum + a.duration, 0);
+        const startTime = usedTime;
+    
+        // If there’s room in the timeline, return the end‐of‐line slot
+        return startTime;
     }
+    
+    
 
     resetBtn.addEventListener('click', function() {
         plannedActivities = [];
@@ -135,7 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedActivityEl.textContent = 'Aucune';
         activityDurationInput.value = '5';
         updateTimeline();
-        updateRemainingTime();
         validateCalculateButton();
     });
 
@@ -216,16 +186,6 @@ document.addEventListener('DOMContentLoaded', () => {
         totalTimeEl.textContent = totalDuration;
     }
 
-    function updateRemainingTime() {
-        const remaining = getRemainingTime();
-        remainingTimeEl.textContent = remaining;
-        if (selectedActivity) addActivityBtn.disabled = remaining <= 0;
-    }
-
-    function getRemainingTime() {
-        return totalDuration - getPlannedDuration();
-    }
-
     function getPlannedDuration() {
         return plannedActivities.reduce((total, activity) => total + activity.duration, 0);
     }
@@ -233,20 +193,25 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateTimeline() {
         timeline.innerHTML = '';
         timelineMarkers.innerHTML = '';
-        if (totalDuration <= 0) {
-            emptyTimelineMessage.classList.remove('hidden');
-            return;
-        }
+
         emptyTimelineMessage.classList.add('hidden');
 
         plannedActivities.sort((a, b) => a.startTime - b.startTime);
+
+        // Calculate the actual sum of all planned durations
+        const sumDuration = plannedActivities.reduce((sum, a) => sum + a.duration, 0);
+        // If nothing is planned, show the "empty" message and bail out
+        if (sumDuration === 0) {
+            emptyTimelineMessage.classList.remove('hidden');
+            return;
+        }
 
         plannedActivities.forEach((activity, index) => {
             const block = document.createElement('div');
             block.className = 'timeline-block absolute h-full rounded-md flex items-center justify-center text-white text-xs font-medium overflow-hidden';
             block.style.backgroundColor = categoryColors[activity.category] || '#6366f1';
-            block.style.left = `${(activity.startTime / totalDuration) * 100}%`;
-            block.style.width = `${(activity.duration / totalDuration) * 100}%`;
+            block.style.left = `${(activity.startTime / sumDuration) * 100}%`;
+            block.style.width = `${(activity.duration / sumDuration) * 100}%`;
             if (activity.duration >= 5) block.textContent = `${getActivityShortName(activity.name)} (${activity.duration}min)`;
 
             const deleteBtn = document.createElement('button');
@@ -256,15 +221,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.stopPropagation();
                 plannedActivities.splice(index, 1);
                 updateTimeline();
-                updateRemainingTime();
                 validateCalculateButton();
             });
             block.appendChild(deleteBtn);
             timeline.appendChild(block);
         });
 
-        const numMarkers = Math.min(totalDuration, 12);
-        const step = totalDuration / numMarkers;
+        const numMarkers = Math.min(sumDuration, 12);
+        const step = sumDuration / numMarkers;
         for (let i = 0; i <= numMarkers; i++) {
             const marker = document.createElement('div');
             marker.className = 'text-center';
@@ -291,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'Prime': 'Prime Video',
             'web': 'Navigation Web',
             'Spotify': 'Spotify',
-            'jeux-casual': 'Jeux Casual'
+            'pubg': 'Jeux Casual'
         };
         return map[name] || name;
     }
@@ -313,18 +277,17 @@ document.addEventListener('DOMContentLoaded', () => {
             'Prime': 'Prime',
             'web': 'Web',
             'Spotify': 'Spotify',
-            'jeux-casual': 'Jeux'
+            'pubg': 'Jeux'
         };
         return map[name] || name;
     }
 
     function validateCalculateButton() {
         const calculateBtn = document.getElementById('calculate-btn');
-        calculateBtn.disabled = plannedActivities.length === 0 || totalDuration === 0;
+        calculateBtn.disabled = plannedActivities.length === 0 ;
     }
 
     validateCalculateButton();
     updateTotalTime();
     updateTimeline();
-    updateRemainingTime();
 });
