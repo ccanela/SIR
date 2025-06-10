@@ -35,6 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const co2Equivalent = document.getElementById('co2-equivalent');
     const activitiesDetail = document.getElementById('activities-detail');
     const newSimulation = document.getElementById('new-simulation');
+    const toggleDetailsBtn = document.getElementById('toggle-details');
+    const detailsSection = document.getElementById('details-section');
+
+    let detailsVisible = false;
+    toggleDetailsBtn.addEventListener('click', () => {
+    detailsVisible = !detailsVisible;
+    detailsSection.classList.toggle('hidden', !detailsVisible);
+    toggleDetailsBtn.textContent = detailsVisible ? 'Voir moins de détails' : 'Voir plus de détails';
+    });
 
     durationButtons.forEach(btn => {
         btn.addEventListener('click', () => {
