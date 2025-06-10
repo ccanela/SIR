@@ -1,7 +1,8 @@
 # SIR
 
-> Projet INSA Lyon – TC – 2024–2025  
-> Analyse et visualisation grand public de la consommation énergétique des smartphones
+> Projet SIR INSA Lyon
+>4TCA – 2024-2025  
+> Analyse et présentation vers le grand public de données de mesure énergétique sur des équipements mobiles
 
 ---
 
