@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 let energyTable = [];
 
 // Load the scenario summary CSV
-/*fs.createReadStream('scenario_summary_df.csv')  // Assuming it's in the server folder
+fs.createReadStream('scenario_summary_df.csv')  // Assuming it's in the server folder
   .pipe(csv())
   .on('data', (row) => {
     // Ensure energy values are parsed as numbers
@@ -29,7 +29,6 @@ let energyTable = [];
   .on('end', () => {
     console.log('✅ Scenario energy summary loaded:', energyTable.length, 'scenarios');
   });
-*/
 
 // Simulated energy table (replace with DB later)
 const ENERGY_TABLE = {
