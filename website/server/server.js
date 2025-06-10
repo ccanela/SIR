@@ -30,6 +30,21 @@ fs.createReadStream('scenario_summary_df.csv')  // Assuming it's in the server f
     console.log('✅ Scenario energy summary loaded:', energyTable.length, 'scenarios');
   });
 
+let deviceSpecs = {};
+
+fs.createReadStream('batteries_ue.csv')
+  .pipe(csv())
+  .on('data', (row) => {
+    const key = row.device.trim().toLowerCase();
+    deviceSpecs[key] = {
+      batteryWh: parseFloat(row.battery_capacity_wh),
+      screenSize: parseFloat(row.screen_size_inches)
+    };
+  })
+  .on('end', () => {
+    console.log('✅ Device specs loaded:', Object.keys(deviceSpecs).length);
+  });
+
 
 
 app.post('/calculate', (req, res) => {
@@ -69,11 +84,20 @@ app.post('/calculate', (req, res) => {
     }
   }
 
-  const batteryPercent = Math.min(100, (totalEnergy / 15) * 100);
+  const deviceKey = deviceName.toLowerCase();
+  let batteryCapacity = deviceSpecs[deviceKey]?.batteryWh;
+
+  if (!batteryCapacity) {
+    // fallback to Pixel 6Pro
+    batteryCapacity = deviceSpecs['6pro']?.batteryWh || 15;
+  }
+
+  const batteryPercent = Math.min(100, (totalEnergy / batteryCapacity) * 100);
+
   // Convert Wh → kWh
-    const energy_kWh = totalEnergy / 1000;
-    const co2Min = energy_kWh * 50; // ADEME
-    const co2Max = energy_kWh * 60; // RTE
+  const energy_kWh = totalEnergy / 1000;
+  const co2Min = energy_kWh * 50; // ADEME
+  const co2Max = energy_kWh * 60; // RTE
 
   console.log(`⚡ Total Energy: ${totalEnergy.toFixed(2)} Wh`);
   console.log(`🔋 Battery %: ${batteryPercent.toFixed(1)}%`);
