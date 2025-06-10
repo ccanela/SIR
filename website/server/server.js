@@ -33,12 +33,12 @@ fs.createReadStream('scenario_summary_df.csv')  // Assuming it's in the server f
 let deviceSpecs = {};
 
 fs.createReadStream('batteries_ue.csv')
-  .pipe(csv())
+  .pipe(csv({ separator: ';' }))
   .on('data', (row) => {
-    const key = row.device.trim().toLowerCase();
+    const key = row.value.trim().toLowerCase(); 
     deviceSpecs[key] = {
-      batteryWh: parseFloat(row.battery_capacity_wh),
-      screenSize: parseFloat(row.screen_size_inches)
+      batteryWh: parseFloat(row['batterie_Wh']), 
+      screenSize: parseFloat(row['taille_ecran (inch)']),
     };
   })
   .on('end', () => {
