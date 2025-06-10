@@ -166,6 +166,21 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(res => res.json())
         .then(data => {
+            const missing = data.activities.filter(a => a.fallback);
+
+            if (missing.length > 0) {
+                document.getElementById('results').classList.add('hidden');
+                const list = document.getElementById('missing-combinations');
+                list.innerHTML = '';
+                missing.forEach(m => {
+                const li = document.createElement('li');
+                li.textContent = `${getActivityFullName(m.name)} - ${m.network.toUpperCase()} - ${m.mobility === 'moving' ? 'En déplacement' : 'Stationnaire'}`;
+                list.appendChild(li);
+                });
+                document.getElementById('no-data-popup').classList.remove('hidden');
+                return;
+            }
+
             results.classList.remove('hidden');
             results.scrollIntoView({ behavior: 'smooth' });
 
@@ -187,7 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${a.consumption.toFixed(2)} Wh</td>
                 </tr>
             `).join('');
-
         })
         .catch(err => alert("Erreur lors du calcul : " + err));
     });
