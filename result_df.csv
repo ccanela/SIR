@@ -1,0 +1,21 @@
+File name,Exp Number,Total Experiments,Device,RAN Technology,Platform,Condition,Path,Location Route,E_RF Jm,E_BAT Jm,E_BB Jm,E_PA Jm,Total E_RF J,Total E_BAT J,Total E_PA J,Total E_BB J,E_RF % BAT,Total Duration (sec),Total Duration (min),Measured SPS,SPS Count Method
+1_5_6pro_LTE_tiktok_Dyna_T1_Belcombe_Auditorium_64sps.csv,1,5,6pro,LTE,tiktok,Dyna,T1,Belcombe to Auditorium,78.60,209.38,61.20,17.40,776.13,2067.51,171.81,604.33,37.54%,592.46,9.87,1023.87860,1022.00337
+1_5_6pro_LTE_tiktok_Dyna_T1_Doua_Auditorium_64sps.csv,1,5,6pro,LTE,tiktok,Dyna,T1,Doua to Auditorium,45.65,131.88,42.68,2.96,53.61,154.88,3.48,50.13,34.61%,70.46,1.17,1023.71642,1000.88889
+1_5_6pro_LTE_insta_Dyna_T1_Prefecture_INSA_64sps.csv,1,5,6pro,LTE,insta,Dyna,T1,Prefecture to INSA,60.99,184.83,54.35,6.64,1140.84,3457.43,124.23,1016.61,33.00%,1122.34,18.71,1023.86929,1022.31879
+2_5_6pro_LTE_insta_stat_64sps.csv,2,5,6pro,LTE,insta,stat,N/A,Fixed Location,74.68,207.23,70.36,4.31,818.93,2272.54,47.30,771.63,36.04%,657.97,10.97,1024.31503,1023.34347
+3_5_6pro_LTE_insta_Dyna_T1_Prefecture_INSA_64sps.csv,3,5,6pro,LTE,insta,Dyna,T1,Prefecture to INSA,45.46,189.98,41.24,4.21,1063.64,4445.43,98.56,965.08,23.93%,1403.94,23.40,1023.40371,1021.67687
+3_5_6pro_LTE_tiktok_Dyna_T1_INSA_Prefecture_64sps.csv,3,5,6pro,LTE,tiktok,Dyna,T1,INSA to Prefecture,58.42,170.76,51.66,6.76,1293.32,3780.53,149.65,1143.66,34.21%,1328.36,22.14,1023.60257,1021.40150
+2_5_6pro_3G_tiktok_stat_64sps.csv,2,5,6pro,3G,tiktok,stat,N/A,Fixed Location,55.00,164.82,45.59,9.41,401.22,1202.41,68.65,332.57,33.37%,437.71,7.30,1023.09692,1021.47945
+3_5_6pro_3G_tiktok_stat_64sps.csv,3,5,6pro,3G,tiktok,stat,N/A,Fixed Location,51.43,165.43,43.02,8.41,490.71,1578.26,80.28,410.44,31.09%,572.44,9.54,1024.57360,1020.82230
+1_5_6pro_3G_YTshorts_stat_64sps.csv,1,5,6pro,3G,YTshorts,stat,N/A,Fixed Location,59.57,163.56,43.26,16.31,618.24,1697.58,169.26,448.98,36.42%,622.74,10.38,1023.43603,1020.41026
+2_5_6pro_3G_insta_stat_64sps.csv,2,5,6pro,3G,insta,stat,N/A,Fixed Location,49.97,198.27,43.74,6.23,557.89,2213.63,69.52,488.36,25.20%,669.89,11.16,1023.32380,1020.68554
+1_5_6pro_3G_tiktok_stat_64sps.csv,1,5,6pro,3G,tiktok,stat,N/A,Fixed Location,52.62,162.47,46.36,6.26,579.57,1789.46,68.99,510.58,32.39%,660.86,11.01,1023.07674,1020.37462
+2_5_6pro_LTE_insta_Dyna_T1_Prefecture_INSA_64sps.csv,2,5,6pro,LTE,insta,Dyna,T1,Prefecture to INSA,52.55,200.77,47.09,5.45,1171.33,4475.27,121.55,1049.78,26.17%,1337.46,22.29,1023.86957,1021.74160
+2_5_6pro_LTE_YTshorts_stat_64sps.csv,2,5,6pro,LTE,YTshorts,stat,N/A,Fixed Location,57.59,-189.48,44.89,12.70,621.10,-2043.31,136.99,484.10,-30.40%,647.03,10.78,1023.68485,1021.20988
+2_5_6pro_LTE_tiktok_stat_64sps.csv,2,5,6pro,LTE,tiktok,stat,N/A,Fixed Location,52.74,153.79,40.54,12.20,525.10,1531.21,121.44,403.66,34.29%,597.38,9.96,1023.82514,1020.10017
+2_5_6pro_3G_YTshorts_stat_64sps.csv,2,5,6pro,3G,YTshorts,stat,N/A,Fixed Location,49.42,147.31,41.60,7.82,515.39,1536.14,81.54,433.85,33.55%,625.66,10.43,1023.42305,1020.29984
+2_5_6pro_LTE_tiktok_Dyna_T1_INSA_Prefecture_64sps.csv,2,5,6pro,LTE,tiktok,Dyna,T1,INSA to Prefecture,49.75,192.18,44.59,5.16,1190.56,4599.16,123.45,1067.10,25.89%,1435.92,23.93,1024.38073,1022.65275
+1_5_6pro_LTE_YTshorts_stat_64sps.csv,1,5,6pro,LTE,YTshorts,stat,N/A,Fixed Location,78.58,184.44,53.42,25.16,817.77,1919.56,261.84,555.93,42.60%,624.44,10.41,1023.90559,1022.05440
+1_5_6pro_LTE_tiktok_stat_64sps.csv,1,5,6pro,LTE,tiktok,stat,N/A,Fixed Location,61.42,-220.79,48.97,12.45,622.67,-2238.38,126.17,496.50,-27.82%,608.29,10.14,1023.93157,1021.79310
+1_5_6pro_LTE_insta_stat_64sps.csv,1,5,6pro,LTE,insta,stat,N/A,Fixed Location,70.92,192.20,63.34,7.58,753.83,2042.82,80.57,673.26,36.90%,637.72,10.63,1024.99717,1023.54859
+1_5_6pro_3G_insta_stat_64sps.csv,1,5,6pro,3G,insta,stat,N/A,Fixed Location,48.01,190.51,42.88,5.12,514.79,2042.83,54.94,459.85,25.20%,643.39,10.72,1023.33411,1021.39130
