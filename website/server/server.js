@@ -84,15 +84,16 @@ app.post('/calculate', (req, res) => {
     }
   }
 
-  const deviceKey = deviceName.toLowerCase();
-  let batteryCapacity = deviceSpecs[deviceKey]?.batteryWh;
+  const baseDevice = '6pro';
+  const userKey = deviceName.toLowerCase();
+  const baseSpecs = deviceSpecs[baseDevice] || { batteryWh: 19.26, screenSize: 6.4 };
+  const targetSpecs = deviceSpecs[userKey] || baseSpecs;
 
-  if (!batteryCapacity) {
-    // fallback to Pixel 6Pro
-    batteryCapacity = deviceSpecs['6pro']?.batteryWh || 15;
-  }
+  const screenRatio = (targetSpecs.screenSize / baseSpecs.screenSize) ** 2;
+  const adjustedCapacity = targetSpecs.batteryWh * screenRatio;
 
-  const batteryPercent = Math.min(100, (totalEnergy / batteryCapacity) * 100);
+  const batteryPercent = Math.min(100, (totalEnergy / adjustedCapacity) * 100);
+
 
   // Convert Wh → kWh
   const energy_kWh = totalEnergy / 1000;
