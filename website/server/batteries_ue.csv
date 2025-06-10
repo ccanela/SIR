@@ -1,23 +1,24 @@
-value;model;batterie (mAh);tension_batterie (V);batterie_Wh
-6pro;Google 6Pro;5003;3.85;19.26
-iphone-15-pro-max;iPhone 15 Pro Max;4422;3.82;16.89
-iphone-15-pro;iPhone 15 Pro;3274;3.82;12.51
-iphone-15;iPhone 15;3349;3.82;12.79
-iphone-14-plus;iPhone 14 Plus;4323;3.82;16.51
-samsung-s24-ultra;Samsung Galaxy S24 Ultra;5000;3.88;19.4
-samsung-s24-plus;Samsung Galaxy S24+;4900;3.88;19.01
-samsung-s24;Samsung Galaxy S24;4000;3.88;15.52
-samsung-fold5;Samsung Galaxy Z Fold5;4400;3.87;17.03
-samsung-flip5;Samsung Galaxy Z Flip5;3700;3.87;14.32
-pixel-8-pro;Google Pixel 8 Pro;5050;3.85;19.44
-pixel-8;Google Pixel 8;4575;3.85;17.61
-pixel-7a;Google Pixel 7a;4385;3.85;16.88
-oneplus-12;OnePlus 12;5400;3.87;20.90
-oneplus-open;OnePlus Open;4805;3.87;18.60
-xiaomi-14-ultra;Xiaomi 14 Ultra;5300;3.87;20.51
-xiaomi-14;Xiaomi 14;4610;3.87;17.84
-oppo-find-x7;Oppo Find X7 Ultra;5000;3.87;19.35
-nothing-phone-2;Nothing Phone (2);4700;3.87;18.19
-sony-xperia-1-v;Sony Xperia 1 V;5000;3.85;19.25
-huawei-p60-pro;Huawei P60 Pro;4815;3.85;18.54
-huawei-mate-60-pro;Huawei Mate 60 Pro;5000;3.85;19.25
+value;model;batterie (mAh);tension_batterie (V);batterie_Wh;taille_ecran (inch)
+6pro;Google 6Pro;5003;3.85;19.26;6.4
+iphone-15-pro-max;iPhone 15 Pro Max;4422;3.82;16.89;6.7
+iphone-15-pro;iPhone 15 Pro;3274;3.82;12.51;6.1
+iphone-15;iPhone 15;3349;3.82;12.79;6.1
+iphone-14-plus;iPhone 14 Plus;4323;3.82;16.51;6.7
+samsung-s24-ultra;Samsung Galaxy S24 Ultra;5000;3.88;19.4;6.8
+samsung-s24-plus;Samsung Galaxy S24+;4900;3.88;19.01;6.6
+samsung-s24;Samsung Galaxy S24;4000;3.88;15.52;6.1
+samsung-fold5;Samsung Galaxy Z Fold5;4400;3.87;17.03;6.2
+samsung-flip5;Samsung Galaxy Z Flip5;3700;3.87;14.32;6.7
+pixel-8-pro;Google Pixel 8 Pro;5050;3.85;19.44;6.7
+pixel-8;Google Pixel 8;4575;3.85;17.61;6.2
+pixel-7a;Google Pixel 7a;4385;3.85;16.88;6.1
+oneplus-12;OnePlus 12;5400;3.87;20.90;6.7
+oneplus-open;OnePlus Open;4805;3.87;18.60;7.8
+xiaomi-14-ultra;Xiaomi 14 Ultra;5300;3.87;20.51;6.73
+xiaomi-14;Xiaomi 14;4610;3.87;17.84;6.36
+oppo-find-x7;Oppo Find X7 Ultra;5000;3.87;19.35;6.7
+nothing-phone-2;Nothing Phone (2);4700;3.87;18.19;6.7
+sony-xperia-1-v;Sony Xperia 1 V;5000;3.85;19.25;6.5
+huawei-p60-pro;Huawei P60 Pro;4815;3.85;18.54;6.6
+huawei-mate-60-pro;Huawei Mate 60 Pro;5000;3.85;19.25;6.82
+autre;Autre;4500;3.85;17.3;6.2

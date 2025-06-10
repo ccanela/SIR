@@ -30,6 +30,21 @@ fs.createReadStream('scenario_summary_df.csv')  // Assuming it's in the server f
     console.log('✅ Scenario energy summary loaded:', energyTable.length, 'scenarios');
   });
 
+let deviceSpecs = {};
+
+fs.createReadStream('batteries_ue.csv')
+  .pipe(csv({ separator: ';' }))
+  .on('data', (row) => {
+    const key = row.value.trim().toLowerCase(); 
+    deviceSpecs[key] = {
+      batteryWh: parseFloat(row['batterie_Wh']), 
+      screenSize: parseFloat(row['taille_ecran (inch)']),
+    };
+  })
+  .on('end', () => {
+    console.log('✅ Device specs loaded:', Object.keys(deviceSpecs).length);
+  });
+
 
 
 app.post('/calculate', (req, res) => {
@@ -69,11 +84,21 @@ app.post('/calculate', (req, res) => {
     }
   }
 
-  const batteryPercent = Math.min(100, (totalEnergy / 15) * 100);
+  const baseDevice = '6pro';
+  const userKey = deviceName.toLowerCase();
+  const baseSpecs = deviceSpecs[baseDevice] || { batteryWh: 19.26, screenSize: 6.4 };
+  const targetSpecs = deviceSpecs[userKey] || baseSpecs;
+
+  const screenRatio = (targetSpecs.screenSize / baseSpecs.screenSize) ** 2;
+  const adjustedCapacity = targetSpecs.batteryWh * screenRatio;
+
+  const batteryPercent = Math.min(100, (totalEnergy / adjustedCapacity) * 100);
+
+
   // Convert Wh → kWh
-    const energy_kWh = totalEnergy / 1000;
-    const co2Min = energy_kWh * 50; // ADEME
-    const co2Max = energy_kWh * 60; // RTE
+  const energy_kWh = totalEnergy / 1000;
+  const co2Min = energy_kWh * 50; // ADEME
+  const co2Max = energy_kWh * 60; // RTE
 
   console.log(`⚡ Total Energy: ${totalEnergy.toFixed(2)} Wh`);
   console.log(`🔋 Battery %: ${batteryPercent.toFixed(1)}%`);
