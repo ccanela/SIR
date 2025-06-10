@@ -70,7 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
     addActivityBtn.addEventListener('click', function() {
         if (!selectedActivity) return;
         const duration = parseInt(activityDurationInput.value);
-        console.log("activity duration parsée en entrée "+duration)
         if (isNaN(duration) || duration <= 0) {
             alert('Veuillez entrer une durée valide');
             return;
@@ -81,10 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Pas de créneau disponible.');
             return;
         }
-        console.log("starttime "+startTime)
 
         const endTime = startTime + duration;
-        console.log("endtime "+endTime)
         plannedActivities.push({
             name: selectedActivity.name,
             category: selectedActivity.category,
@@ -160,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
         
                 document.getElementById('no-data-popup').classList.remove('hidden');
-                console.log("caca")
+                return;
             }
         
             results.classList.remove('hidden');

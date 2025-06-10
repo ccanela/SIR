@@ -491,7 +491,19 @@
             </button>
         </div>
     </div>
-
+    <div id="no-data-popup" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div class="bg-white max-w-md w-full rounded-xl shadow-lg p-6 text-center">
+          <h3 class="text-lg font-bold text-red-600 mb-3">Scénario non disponible</h3>
+          <p class="text-sm text-gray-700 mb-4">
+            Aucune donnée trouvée pour les combinaisons suivantes :
+          </p>
+          <ul id="missing-combinations" class="text-sm text-left text-gray-600 list-disc list-inside mb-4"></ul>
+          <button onclick="document.getElementById('no-data-popup').classList.add('hidden')"
+                  class="mt-2 px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">
+            Fermer
+          </button>
+        </div>
+      </div>
 <!-- Résultats -->
 <div id="results" class="hidden p-6 bg-gray-50 border-t border-gray-200">
   <h2 class="text-xl font-bold text-gray-800 mb-4">Résultats de votre simulation</h2>
@@ -578,19 +590,7 @@
   </button>
 </div>
 
-<div id="no-data-popup" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-  <div class="bg-white max-w-md w-full rounded-xl shadow-lg p-6 text-center">
-    <h3 class="text-lg font-bold text-red-600 mb-3">Scénario non disponible</h3>
-    <p class="text-sm text-gray-700 mb-4">
-      Aucune donnée trouvée pour les combinaisons suivantes :
-    </p>
-    <ul id="missing-combinations" class="text-sm text-left text-gray-600 list-disc list-inside mb-4"></ul>
-    <button onclick="document.getElementById('no-data-popup').classList.add('hidden')"
-            class="mt-2 px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">
-      Fermer
-    </button>
-  </div>
-</div>
+
 
 
 <!-- Modale CO₂ stylée avec icônes -->
