@@ -216,6 +216,15 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        function recomputeActivityTimes() {
+            let currentTime = 0;
+            plannedActivities.forEach(activity => {
+                activity.startTime = currentTime;
+                activity.endTime = currentTime + activity.duration;
+                currentTime = activity.endTime;
+                });
+        }
+
         plannedActivities.forEach((activity, index) => {
             const block = document.createElement('div');
             block.className = 'timeline-block absolute h-full rounded-md flex items-center justify-center text-white text-xs font-medium overflow-hidden';
@@ -230,6 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
             deleteBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 plannedActivities.splice(index, 1);
+                recomputeActivityTimes();
                 updateTimeline();
                 validateCalculateButton();
             });
