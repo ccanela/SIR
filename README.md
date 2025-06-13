@@ -56,7 +56,7 @@ SIR/
 ## ⚙️ Fonctionnement de l’API
 Le backend `/server.js` :
 
--> lit les fichiers CSV de scénarios (scenario_summary_df.csv) et specs (batteries_ue.csv) ;
+-> lit les fichiers CSV de scénarios (scenario_summary_df.csv) et specifications des appareils (batteries_ue.csv) ;
 
 -> reçoit activités planifiées, duration, type d’appareil, réseau et état (statique ou mobile) ;
 
