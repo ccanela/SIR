@@ -1,4 +1,4 @@
-# 📱 SIR — Simulateur d’Impact Réel
+# 📱 SIR 
 
 > Projet SIR – INSA Lyon  
 > 4TCA – 2024-2025  
