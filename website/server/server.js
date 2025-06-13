@@ -1,4 +1,4 @@
-// File: server/server.js
+// /server.js
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -129,8 +129,8 @@ app.post('/calculate', (req, res) => {
 
   // Convert Wh → kWh
   const energy_kWh = totalEnergy / 1000;
-  const co2Min = energy_kWh * 50; // ADEME
-  const co2Max = energy_kWh * 60; // RTE
+  const co2Min = energy_kWh * 21.7; // RTE 2024
+  const co2Max = energy_kWh * 60; // ADEME
 
   console.log(`⚡ Total Energy: ${totalEnergy.toFixed(2)} Wh`);
   console.log(`🔋 Battery %: ${batteryPercent.toFixed(1)}%`);
