@@ -38,12 +38,14 @@ function loadEnergyCSV(filePath) {
 
 // Load both short video and streaming datasets
 Promise.all([
-  loadEnergyCSV('scenario_summary_df.csv'),
-  loadEnergyCSV('video_streaming_scenario_summary_df.csv')
-]).then(([shortVideoTable, longVideoTable]) => {
-  energyTable = [...shortVideoTable, ...longVideoTable];
+  loadEnergyCSV('scenario_summary_df.csv'),                // short video apps
+  loadEnergyCSV('video_streaming_scenario_summary_df.csv'),// long video apps
+  loadEnergyCSV('visio_scenario_summary_df.csv')           // visio apps
+]).then(([shortVideoTable, longVideoTable, visioTable]) => {
+  energyTable = [...shortVideoTable, ...longVideoTable, ...visioTable];
   console.log(`✅ Total scenarios loaded: ${energyTable.length}`);
 });
+
 
 
 let deviceSpecs = {};
