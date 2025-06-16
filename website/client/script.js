@@ -36,6 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const newSimulation = document.getElementById('new-simulation');
     const toggleDetailsBtn = document.getElementById('toggle-details');
     const detailsSection = document.getElementById('details-section');
+    const batteryInfoModal = document.getElementById('battery-details-modal');
+    const batteryInfoBtn = document.getElementById('battery-info-btn');
+
 
     let detailsVisible = false;
     toggleDetailsBtn.addEventListener('click', () => {
@@ -103,7 +106,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return startTime;
     }
     
-    
+    if (batteryInfoBtn && batteryInfoModal) {
+        batteryInfoBtn.addEventListener('click', () => {
+            batteryInfoModal.classList.remove('hidden');
+        });
+
+        // Optional: Close modal when clicking on the background
+        batteryInfoModal.addEventListener('click', (event) => {
+            if (event.target === batteryInfoModal) {
+                batteryInfoModal.classList.add('hidden');
+            }
+        });
+    }
 
     resetBtn.addEventListener('click', function() {
         plannedActivities = [];
@@ -173,7 +187,22 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.battery_percent < 30) batteryLevel.classList.add('bg-green-500');
             else if (data.battery_percent < 70) batteryLevel.classList.add('bg-yellow-500');
             else batteryLevel.classList.add('bg-red-500');
-        
+            
+            const rfEnergyValueEl = document.getElementById('rf-energy-value');
+            const rfEnergyPercentageEl = document.getElementById('rf-energy-percentage');
+
+            if (rfEnergyValueEl && rfEnergyPercentageEl) {
+                // Display the RF energy consumption
+                rfEnergyValueEl.textContent = data.total_rf_energy.toFixed(2);
+
+                // Calculate the percentage of RF energy out of the total
+                let rfPercentage = 0;
+                if (data.total_energy > 0) { // Avoid division by zero
+                    rfPercentage = (data.total_rf_energy / data.total_energy) * 100;
+                }
+                rfEnergyPercentageEl.textContent = rfPercentage.toFixed(1);
+            }
+            
             activitiesDetail.innerHTML = data.activities.map(a => `
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${getActivityFullName(a.name)}</td>
@@ -216,6 +245,15 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        function recomputeActivityTimes() {
+            let currentTime = 0;
+            plannedActivities.forEach(activity => {
+                activity.startTime = currentTime;
+                activity.endTime = currentTime + activity.duration;
+                currentTime = activity.endTime;
+                });
+        }
+
         plannedActivities.forEach((activity, index) => {
             const block = document.createElement('div');
             block.className = 'timeline-block absolute h-full rounded-md flex items-center justify-center text-white text-xs font-medium overflow-hidden';
@@ -230,6 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
             deleteBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 plannedActivities.splice(index, 1);
+                recomputeActivityTimes();
                 updateTimeline();
                 validateCalculateButton();
             });

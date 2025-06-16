@@ -1,4 +1,4 @@
-// File: server/server.js
+// /server.js
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -73,6 +73,7 @@ app.post('/calculate', (req, res) => {
   console.log(`📱 Device: ${deviceName}, 🌐 Network: ${network}, 🧭 Mobility: ${mobility}, 🎯 Activities: [${activityNames}]`);
   
   let totalEnergy = 0;
+  let totalRfEnergy = 0; 
   const details = [];
   // Define which activities are considered streaming
   const streamingApps = ['netflix', 'disney', 'amazon', 'apple', 'youtube'];
@@ -157,10 +158,16 @@ app.post('/calculate', (req, res) => {
   
     if (match) {
       console.log("found E_BAT "+match.E_BAT_Jm)
-      const rate        = parseFloat(match.E_BAT_Jm) / 3600;
-      const consumption = rate * activity.duration;
-      totalEnergy     += consumption;
-      details.push({ ...activity, consumption, fallback: false });
+      console.log("found E_RF "+match.E_RF_Jm)
+      const batteryRate = parseFloat(match.E_BAT_Jm) / 3600;
+      const batteryConsumption = batteryRate * activity.duration;
+      totalEnergy += batteryConsumption;
+
+      const rfRate = parseFloat(match.E_RF_Jm) / 3600;
+      const rfConsumption = rfRate * activity.duration;
+      totalRfEnergy += rfConsumption;
+
+      details.push({ ...activity, consumption : batteryConsumption, fallback: false });
     } else {
       details.push({
         ...activity,
@@ -186,8 +193,8 @@ app.post('/calculate', (req, res) => {
 
   // Convert Wh → kWh
   const energy_kWh = totalEnergy / 1000;
-  const co2Min = energy_kWh * 50; // ADEME
-  const co2Max = energy_kWh * 60; // RTE
+  const co2Min = energy_kWh * 21.7; // RTE 2024
+  const co2Max = energy_kWh * 60; // ADEME
 
   console.log(`⚡ Total Energy: ${totalEnergy.toFixed(2)} Wh`);
   console.log(`🔋 Battery %: ${batteryPercent.toFixed(1)}%`);
@@ -198,6 +205,7 @@ app.post('/calculate', (req, res) => {
     // Send both min and max
 
     total_energy: totalEnergy,
+    total_rf_energy: totalRfEnergy,
     battery_percent: batteryPercent,
     co2_min: co2Min,
     co2_max: co2Max,

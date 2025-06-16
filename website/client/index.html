@@ -507,7 +507,14 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="bg-white p-5 rounded-xl shadow-sm">
-                <h3 class="text-lg font-medium text-gray-700 mb-3">Consommation de la batterie</h3>
+                <h3 class="text-lg font-medium text-gray-700 mb-3">
+                    Consommation de la batterie
+                    <button id="battery-info-btn"
+                            class="ml-2 w-5 h-5 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 text-xs font-bold hover:bg-gray-300 transition"
+                            aria-label="Informations sur la consommation de la batterie"
+                            title="En savoir plus">?
+                    </button>
+                </h3>
                 <div class="flex items-end">
                     <span id="total-energy" class="text-4xl font-bold text-indigo-600">0</span>
                     <span class="text-xl text-gray-500 ml-2">Wh</span>
@@ -527,7 +534,7 @@
                 <p class="mt-2 text-sm text-gray-500">D'une batterie standard de l'appareil sélectionné</p>
             </div>
 
-            <div class="bg-white p-5 rounded-xl shadow-sm">
+            <!-- <div class="bg-white p-5 rounded-xl shadow-sm">
                 <h3 class="text-lg font-medium text-gray-700 mb-3">Consommation de l'infrastructure réseau</h3>
                 <div class="flex items-end">
                     <span id="total-energy" class="text-4xl font-bold text-indigo-600">0</span>
@@ -543,7 +550,7 @@
                     <span class="text-xl text-gray-500 ml-2">Wh</span>
                 </div>
                 <p class="mt-2 text-sm text-gray-500">Énergie consommée par votre appareil et l'infrastructure réseau</p>
-            </div>
+            </div>  -->
 
 
     <div class="md:col-span-2 bg-white p-5 rounded-xl shadow-sm">
@@ -598,74 +605,101 @@
     <h3 class="text-2xl font-semibold mb-6 text-center text-indigo-700">Comment cette estimation est-elle faite ?</h3>
 
     <p class="text-base leading-relaxed text-gray-700 mb-4">
-      Cette estimation est basée sur la consommation électrique réelle de votre appareil (en kWh) multipliée par le facteur d’émission moyen en France.
+      Cette estimation repose sur la consommation électrique de votre appareil (exprimée en kWh), multipliée par un facteur d’émission moyen en France.
     </p>
 
     <div class="flex justify-around items-center text-center my-6 space-x-4">
-    <!-- Nucléaire -->
-    <div>
+      <!-- Nucléaire -->
+      <div>
         <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-2" viewBox="0 0 64 64" fill="none">
-        <circle cx="32" cy="32" r="30" fill="#E0E7FF" />
-        <ellipse cx="32" cy="40" rx="12" ry="8" fill="#6366F1" />
-        <circle cx="32" cy="32" r="8" fill="#a5b4fc" />
-        <rect x="28" y="20" width="8" height="16" rx="4" fill="#6366F1" />
+          <circle cx="32" cy="32" r="30" fill="#E0E7FF" />
+          <ellipse cx="32" cy="40" rx="12" ry="8" fill="#6366F1" />
+          <circle cx="32" cy="32" r="8" fill="#a5b4fc" />
+          <rect x="28" y="20" width="8" height="16" rx="4" fill="#6366F1" />
         </svg>
-        <p class="text-xl font-bold">60%</p>
+        <p class="text-xl font-bold">67%</p>
         <p class="text-sm text-gray-600">Nucléaire</p>
-    </div>
+      </div>
 
-    <!-- Renouvelable -->
-    <div>
+      <!-- Renouvelable -->
+      <div>
         <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-2" viewBox="0 0 64 64" fill="none">
-        <circle cx="32" cy="32" r="30" fill="#A7F3D0" />
-        <path d="M32 12v20l16 8" stroke="#059669" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M32 32c-8 0-12 8-12 8" stroke="#059669" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="32" cy="32" r="30" fill="#A7F3D0" />
+          <path d="M32 12v20l16 8" stroke="#059669" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M32 32c-8 0-12 8-12 8" stroke="#059669" stroke-width="4" stroke-linecap="round"/>
         </svg>
-        <p class="text-xl font-bold">20%</p>
+        <p class="text-xl font-bold">28%</p>
         <p class="text-sm text-gray-600">Renouvelable</p>
-    </div>
+      </div>
 
-    <!-- Fossile -->
-    <div>
+      <!-- Fossile -->
+      <div>
         <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-2" viewBox="0 0 64 64" fill="none">
-        <circle cx="32" cy="32" r="30" fill="#FCD34D" />
-        <path d="M20 38 L20 28 L28 28 L28 38 L32 34 L36 38 L36 26 L44 26 L44 38 Z" fill="#92400e" />
-        <circle cx="24" cy="34" r="2" fill="#fff"/>
-        <circle cx="32" cy="34" r="2" fill="#fff"/>
-        <circle cx="40" cy="34" r="2" fill="#fff"/>
-        <path d="M40 18c-1-2 1-3 1-5s-3-2-2-4" stroke="#92400e" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="32" cy="32" r="30" fill="#FCD34D" />
+          <path d="M20 38 L20 28 L28 28 L28 38 L32 34 L36 38 L36 26 L44 26 L44 38 Z" fill="#92400e" />
+          <circle cx="24" cy="34" r="2" fill="#fff"/>
+          <circle cx="32" cy="34" r="2" fill="#fff"/>
+          <circle cx="40" cy="34" r="2" fill="#fff"/>
+          <path d="M40 18c-1-2 1-3 1-5s-3-2-2-4" stroke="#92400e" stroke-width="2" stroke-linecap="round"/>
         </svg>
-        <p class="text-xl font-bold">20%</p>
-        <p class="text-sm text-gray-600">Fossile</p>
+        <p class="text-xl font-bold">5%</p>
+        <p class="text-sm text-gray-600">Autre</p>
+      </div>
     </div>
-    </div>
-
 
     <p class="text-base text-gray-700 mb-2">
-      Les émissions moyennes sont estimées entre <strong>50 et 60 g CO₂ par kWh</strong> selon les sources (ADEME, RTE).
+      L’estimation des émissions de CO₂ est calculée en multipliant l’énergie consommée (en kWh) par une intensité carbone comprise entre <strong>21,7 gCO₂/kWh</strong>, moyenne annuelle observée en France en 2024 (source : <a href="https://analysesetdonnees.rte-france.com/bilan-electrique-2024/emissions#Introduction" target="_blank" class="text-indigo-600 underline hover:text-indigo-800">
+        RTE
+      </a>), et <strong>60 gCO₂/kWh</strong>, valeur de référence haute utilisée par l’ADEME pour refléter les variations selon les conditions de production.
     </p>
-    <p class="text-sm italic text-gray-500">
-      L’intervalle affiché reflète cette incertitude entre les différentes méthodes de calcul.
+
+    <p class="text-sm text-gray-600 mb-4">
+      Pour en savoir plus, consultez les données actualisées sur 
+      <a href="https://www.rte-france.com/eco2mix/les-emissions-de-co2-par-kwh-produit-en-france" target="_blank" class="text-indigo-600 underline hover:text-indigo-800">
+        eco2mix.rte-france.com
+      </a>.
+    </p>
+
+    <p class="text-xs italic text-gray-500">
+      Ce simulateur ne prend pas en compte les pics de production ni l'origine horaire de l'électricité. L'intervalle affiché reflète l’incertitude entre les différentes méthodes de calcul.
     </p>
   </div>
 </div>
 
-<div id="co2-info-modal" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden flex items-center justify-center">
-  <div class="bg-white rounded-xl shadow-lg max-w-md p-6 relative">
-    <button onclick="document.getElementById('co2-info-modal').classList.add('hidden')" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600">&times;</button>
-    <h3 class="text-lg font-semibold mb-2 text-gray-800">Comment cette estimation est-elle faite ?</h3>
-    <p class="text-sm text-gray-700">
-      Cette estimation est basée sur la consommation électrique réelle de votre appareil (en kWh) multipliée par le facteur d’émission moyen en France.
-    </p>
-    <ul class="text-sm text-gray-600 mt-3 list-disc list-inside space-y-1">
-      <li>En France, l’électricité provient en moyenne de :</li>
-      <li><strong>~65 % nucléaire</strong>, <strong>~20 % renouvelable</strong>, <strong>~10 % fossile</strong>.</li>
-      <li>Les émissions moyennes sont estimées entre <strong>50 et 60 g CO₂ par kWh</strong> (sources : ADEME, RTE).</li>
-    </ul>
-    <p class="text-sm text-gray-700 mt-3">
-      L’intervalle affiché reflète cette incertitude entre les différentes méthodes de calcul.
-    </p>
-  </div>
+<!-- MODAL: Détails de la consommation batterie -->
+<div id="battery-details-modal" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden flex items-center justify-center">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-8 relative text-gray-800 font-sans">
+      <button onclick="document.getElementById('battery-details-modal').classList.add('hidden')" class="absolute top-3 right-4 text-gray-400 hover:text-red-500 text-2xl font-bold">×</button>
+  
+      <h3 class="text-2xl font-semibold mb-6 text-center text-indigo-700">Détail de la consommation de la batterie</h3>
+  
+      <p class="text-base leading-relaxed text-gray-700 mb-4">
+        Votre consommation totale de batterie est la somme de l'énergie utilisée par plusieurs composants. L'un des plus importants est le module <strong>RF (Radio-Fréquence)</strong>.
+      </p>
+  
+      <div class="bg-indigo-50 p-6 rounded-lg my-6">
+        <h4 class="text-lg font-bold text-indigo-800 mb-2">Le module RF : Qu'est-ce que c'est ?</h4>
+        <p class="text-gray-700 mb-4">
+          Le module RF gère toutes les communications sans fil de votre téléphone : <strong>WiFi, 4G, 5G, Bluetooth, GPS...</strong> C'est la "radio" de votre appareil. Son activité est cruciale pour rester connecté, mais elle consomme une part significative de l'énergie.
+        </p>
+        
+        <div class="text-center border-t border-indigo-200 pt-4">
+          <p class="text-sm text-gray-600">Consommation du module RF pour votre scénario :</p>
+          <p class="text-2xl font-bold text-indigo-600 my-1">
+            <span id="rf-energy-value">0.00</span> Wh
+          </p>
+          <p class="text-md text-gray-800">
+            Ce qui représente environ 
+            <strong class="text-indigo-700"><span id="rf-energy-percentage">0</span>%</strong>
+            de la consommation totale de la batterie.
+          </p>
+        </div>
+      </div>
+  
+      <p class="text-xs italic text-gray-500 text-center">
+        Cette valeur varie grandement en fonction de la technologie réseau et de votre mobilité (un appareil en déplacement normalement consomme plus pour maintenir la connexion). 
+      </p>
+    </div>
 </div>
 
   <script src="script.js"></script>
