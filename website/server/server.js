@@ -141,37 +141,41 @@ app.post('/calculate', (req, res) => {
           }
         }
 
-      } else if (activity.name.toLowerCase() === 'call') {
-          let voiceTech = activity.voiceTech || 'VoLTE';  // Default to VoLTE if not provided
-          if (netLower === '3g') {
-            voiceTech = "UMTS"
-          } else if (netLower === "wifi") {
-            // if the user wants to simulate a call using WiFi, we'll use the 4G to VoWiFi scenario
-            voiceTech = "VoWIFI"
-            netLower = "4g"
-            netVariants = ["4g"]
-          }
-          for (const nv of netVariants) {
-              const key = `${devKey}_${nv}_${voiceTech}`;
-              scenarioKey = key;
-              match = energyTable.find(e =>
-                e.scenario_id.toLowerCase() === key.toLowerCase()
-              );
-              if (match) break;
-          }
-          // Fallback to 6Pro if no match
-          if (!match) {
-            for (const nv of netVariants) {
-              const key = `6pro_${nv}_${voiceTech}`;
-              scenarioKey = key;
-              match = energyTable.find(e =>
-                e.scenario_id.toLowerCase() === key.toLowerCase()
-              );
-              if (match) break;
-            }
-          }
+        } else if (activity.name.toLowerCase() === 'call') {
+            let voiceTech = activity.quality || 'VoLTE';  // Default to VoLTE if not explicitly provided
 
-      } else {
+            if (netLower === '3g') {
+                // Force UMTS if user selects 3G network
+                voiceTech = 'UMTS';
+            } else if (netLower === 'wifi') {
+                // VoWIFI over 4G fallback when using WiFi for voice calls
+                voiceTech = 'VoWIFI';
+                netVariants = ['4g']; // force lookup in 4G scenarios
+            }
+
+            // Try matching scenario for given device
+            for (const nv of netVariants) {
+                const key = `${devKey}_${nv}_${voiceTech}`;
+                scenarioKey = key;
+                match = energyTable.find(e =>
+                    e.scenario_id.toLowerCase() === key.toLowerCase()
+                );
+                if (match) break;
+            }
+
+            // Fallback to 6Pro if no match
+            if (!match) {
+                for (const nv of netVariants) {
+                    const key = `6pro_${nv}_${voiceTech}`;
+                    scenarioKey = key;
+                    match = energyTable.find(e =>
+                        e.scenario_id.toLowerCase() === key.toLowerCase()
+                    );
+                    if (match) break;
+                }
+            }
+        }
+ else {
         // Non-streaming → no quality
         for (const nv of netVariants) {
           const key = `${devKey}_${nv}_${actKey}_${condKey}`;

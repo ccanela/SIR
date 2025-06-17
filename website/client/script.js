@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const qualityWrapper = document.getElementById('quality-wrapper');
     const qualitySelect = document.getElementById('quality-select');
+    const callQualitySelect = document.getElementById('call-quality-select');
 
 
     let detailsVisible = false;
@@ -71,6 +72,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 category: this.dataset.category
             };
             selectedActivityEl.textContent = getActivityFullName(selectedActivity.name);
+            // Show call quality if it's a call
+
+            if (selectedActivity.name === 'call') {
+            callQualitySelect.classList.remove('hidden');
+            } else {
+            callQualitySelect.classList.add('hidden');
+            }
 
             // Handle quality options
             const qualityOptions = this.dataset.qualityOptions;
@@ -106,13 +114,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const endTime = startTime + duration;
 
+        // Dynamically choose the right quality select input
+        let quality = undefined;
+        if (selectedActivity.name === 'call') {
+            const callSelect = document.getElementById('call-tech');
+            quality = callSelect?.value;
+        } else if (!qualityWrapper.classList.contains('hidden')) {
+            quality = qualitySelect?.value;
+        }
+
         plannedActivities.push({
             name: selectedActivity.name,
             category: selectedActivity.category,
             duration: duration,
             startTime: startTime,
             endTime: endTime,
-            quality: qualitySelect && !qualityWrapper.classList.contains('hidden') ? qualitySelect.value : undefined
+            quality: quality
         });
 
         updateTimeline();
@@ -164,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: a.name,
                 duration: a.duration,
                 category: a.category,
-                quality: a.quality
+                quality: a.quality || null
             })),
             device: deviceType,
             network: networkType,
