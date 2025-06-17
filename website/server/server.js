@@ -104,12 +104,15 @@ app.post('/calculate', (req, res) => {
       if (isStreaming) {
         // Streaming → requires quality
         let quality = 'auto';
-        if (actKey === 'netflix') {
-          quality = 'eco';
-        } else if (actKey === 'amazon') {
-          quality = 'good';
-        } else if (actKey === 'youtube') {
-          quality = '720p';
+        if (activity.quality) {
+          quality = activity.quality.toLowerCase();
+        } else {
+          // fallback default
+          if (actKey === 'netflix')  quality = 'eco';
+          if (actKey === 'youtube')  quality = '720p';
+          if (actKey === 'amazon')   quality = 'good';
+          if (actKey === 'apple')    quality = 'auto';
+          if (actKey === 'disney')   quality = 'eco';
         }
         for (const nv of netVariants) {
           const key = `${devKey}_${nv}_${actKey}_${quality}_${condKey}`;

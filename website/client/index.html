@@ -207,8 +207,13 @@
                     <h4 class="font-semibold text-gray-700 mb-2 text-center">Streaming</h4>
                     <div class="space-y-3">
                         <!-- Netflix -->
-                        <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
-                            data-category="streaming" data-activity="netflix" data-consumption="0.5" draggable="true">
+                        <div 
+                        class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
+                        data-category="streaming" 
+                        data-activity="netflix" 
+                        data-consumption="0.5"
+                        data-quality-options='["Eco","Max"]' 
+                        draggable="true">
                             <div class="flex items-center">
                                 <div class="bg-red-100 p-3 rounded-full">
                                     <!-- Netflix SVG (N) -->
@@ -223,7 +228,11 @@
                         </div>
                         <!-- Apple TV -->
                         <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
-                            data-category="streaming" data-activity="apple" data-consumption="0.5" draggable="true">
+                            data-category="streaming" 
+                            data-activity="apple" 
+                            data-consumption="0.5"
+                            data-quality-options='["Auto", "High"]' 
+                            draggable="true">
                             <div class="flex items-center">
                                 <div class="bg-gray-100 p-3 rounded-full">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -237,7 +246,11 @@
                         </div>
                         <!-- Disney+ -->
                         <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
-                            data-category="streaming" data-activity="disney" data-consumption="0.5" draggable="true">
+                            data-category="streaming" 
+                            data-activity="disney" 
+                            data-consumption="0.5"
+                            data-quality-options='["Auto", "Eco"]' 
+                            draggable="true">
                             <div class="flex items-center">
                                 <div class="bg-purple-100 p-3 rounded-full">
                                     <!-- Disney SVG (star) -->
@@ -252,7 +265,11 @@
                         </div>
                         <!-- YouTube -->
                         <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
-                            data-category="streaming" data-activity="youtube" data-consumption="0.45" draggable="true">
+                            data-category="streaming" 
+                            data-activity="youtube" 
+                            data-consumption="0.45" 
+                            data-quality-options='["360p", "480p", "720p"]' 
+                            draggable="true">
                             <div class="flex items-center">
                                 <div class="bg-red-100 p-3 rounded-full">
                                     <!-- YouTube SVG (play button) -->
@@ -268,7 +285,11 @@
                         </div>
                         <!-- Prime Video -->
                         <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
-                            data-category="streaming" data-activity="amazon" data-consumption="0.5" draggable="true">
+                            data-category="streaming" 
+                            data-activity="amazon" 
+                            data-consumption="0.5"
+                            data-quality-options='["Auto", "Good", "VeryGood", "Optimal"]'
+                            draggable="true">
                             <div class="flex items-center">
                                 <div class="bg-blue-100 p-3 rounded-full">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -403,6 +424,12 @@
         
         <!-- Timeline de planification -->
         <div class="mb-6">
+            <div class="mt-2 hidden" id="quality-wrapper">
+                <label class="text-sm text-gray-700 mr-2">Qualité vidéo :</label>
+                <select id="quality-select" class="px-2 py-1 border border-gray-300 rounded">
+                    <!-- Dynamically filled by JS -->
+                </select>
+            </div>
             <div class="flex justify-between items-center mb-2">
                 <div class="flex items-center">
                     <label class="block text-gray-700 font-medium">Planification des activités</label>
