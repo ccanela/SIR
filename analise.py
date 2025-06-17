@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Prend le CSV en local
-df = pd.read_csv(r"D:\Daniel\INSA\Materias\4TCA\SIR_2\data\Experiment_Data\SIR_Experiment\Reels\1_5_6pro_LTE_insta_Dyna_T1_Prefecture_INSA_64sps.csv")
+df = pd.read_csv(r"data\Experiment_Data\SIR_Experiment\Reels\1_5_6pro_LTE_insta_Dyna_T1_Prefecture_INSA_64sps.csv")
 # print("colunas no arquico csv")
 # print(df.columns.tolist())
 # with open(r"D:\Daniel\INSA\Materias\4TCA\SIR_2\data\Experiment_Data\SIR_Experiment\Reels\1_5_6pro_3G_insta_stat_64sps.csv", encoding="utf-8") as f:
