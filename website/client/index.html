@@ -82,7 +82,7 @@
                     <label class="inline-flex items-center">
                         <input type="radio" name="mobility" value="stationary" class="h-5 w-5 text-indigo-600" checked>
                         <span class="ml-2 text-gray-700">Stationnaire</span>
-                    </label>
+                   </label>
                     <label class="inline-flex items-center">
                         <input type="radio" name="mobility" value="moving" class="h-5 w-5 text-indigo-600">
                         <span class="ml-2 text-gray-700">En déplacement</span>
@@ -185,6 +185,15 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Callee Tech Select for Calls -->
+                        <div id="call-quality-select" class="mt-2 hidden">
+                        <label for="call-tech" class="text-sm text-gray-600">Technologie de l’interlocuteur :</label>
+                        <select id="call-tech" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg">
+                            <option value="VoLTE">VoLTE</option>
+                            <option value="VoWIFI">VoWIFI</option>
+                            <option value="UMTS">UMTS</option>
+                        </select>
+                        </div>
                         <!-- SMS/Messagerie -->
                         <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
                             data-category="communication" data-activity="SMS" data-consumption="0.1" draggable="true">
@@ -207,8 +216,13 @@
                     <h4 class="font-semibold text-gray-700 mb-2 text-center">Streaming</h4>
                     <div class="space-y-3">
                         <!-- Netflix -->
-                        <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
-                            data-category="streaming" data-activity="netflix" data-consumption="0.5" draggable="true">
+                        <div 
+                        class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
+                        data-category="streaming" 
+                        data-activity="netflix" 
+                        data-consumption="0.5"
+                        data-quality-options='["Eco","Max"]' 
+                        draggable="true">
                             <div class="flex items-center">
                                 <div class="bg-red-100 p-3 rounded-full">
                                     <!-- Netflix SVG (N) -->
@@ -223,7 +237,11 @@
                         </div>
                         <!-- Apple TV -->
                         <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
-                            data-category="streaming" data-activity="apple" data-consumption="0.5" draggable="true">
+                            data-category="streaming" 
+                            data-activity="apple" 
+                            data-consumption="0.5"
+                            data-quality-options='["Auto", "High"]' 
+                            draggable="true">
                             <div class="flex items-center">
                                 <div class="bg-gray-100 p-3 rounded-full">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -237,7 +255,11 @@
                         </div>
                         <!-- Disney+ -->
                         <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
-                            data-category="streaming" data-activity="disney" data-consumption="0.5" draggable="true">
+                            data-category="streaming" 
+                            data-activity="disney" 
+                            data-consumption="0.5"
+                            data-quality-options='["Auto", "Eco"]' 
+                            draggable="true">
                             <div class="flex items-center">
                                 <div class="bg-purple-100 p-3 rounded-full">
                                     <!-- Disney SVG (star) -->
@@ -252,7 +274,11 @@
                         </div>
                         <!-- YouTube -->
                         <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
-                            data-category="streaming" data-activity="youtube" data-consumption="0.45" draggable="true">
+                            data-category="streaming" 
+                            data-activity="youtube" 
+                            data-consumption="0.45" 
+                            data-quality-options='["360p", "480p", "720p"]' 
+                            draggable="true">
                             <div class="flex items-center">
                                 <div class="bg-red-100 p-3 rounded-full">
                                     <!-- YouTube SVG (play button) -->
@@ -268,7 +294,11 @@
                         </div>
                         <!-- Prime Video -->
                         <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
-                            data-category="streaming" data-activity="amazon" data-consumption="0.5" draggable="true">
+                            data-category="streaming" 
+                            data-activity="amazon" 
+                            data-consumption="0.5"
+                            data-quality-options='["Auto", "Good", "VeryGood", "Optimal"]'
+                            draggable="true">
                             <div class="flex items-center">
                                 <div class="bg-blue-100 p-3 rounded-full">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -357,11 +387,12 @@
                             </div>
                         </div>
                         <!-- Spotify -->
+                         <!--
                         <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
                             data-category="autres" data-activity="Spotify" data-consumption="0.2" draggable="true">
                             <div class="flex items-center">
                                 <div class="bg-green-100 p-3 rounded-full">
-                                    <!-- Spotify SVG (music note) -->
+                                    
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13" />
                                         <circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="2" fill="none"/>
@@ -373,6 +404,7 @@
                                 </div>
                             </div>
                         </div>
+                        -->
                         <!-- Jeux Casual -->
                         <div class="activity-card p-4 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer"
                             data-category="autres" data-activity="pubg" data-consumption="0.4" draggable="true">
@@ -401,6 +433,12 @@
         
         <!-- Timeline de planification -->
         <div class="mb-6">
+            <div class="mt-2 hidden" id="quality-wrapper">
+                <label class="text-sm text-gray-700 mr-2">Qualité vidéo :</label>
+                <select id="quality-select" class="px-2 py-1 border border-gray-300 rounded">
+                    <!-- Dynamically filled by JS -->
+                </select>
+            </div>
             <div class="flex justify-between items-center mb-2">
                 <div class="flex items-center">
                     <label class="block text-gray-700 font-medium">Planification des activités</label>

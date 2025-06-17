@@ -40,9 +40,11 @@ function loadEnergyCSV(filePath) {
 Promise.all([
   loadEnergyCSV('scenario_summary_df.csv'),                // short video apps
   loadEnergyCSV('video_streaming_scenario_summary_df.csv'),// long video apps
-  loadEnergyCSV('visio_scenario_summary_df.csv')           // visio apps
-]).then(([shortVideoTable, longVideoTable, visioTable]) => {
-  energyTable = [...shortVideoTable, ...longVideoTable, ...visioTable];
+  loadEnergyCSV('visio_scenario_summary_df.csv'),           // visio apps
+  loadEnergyCSV('others_scenario_summary_df.csv'),
+  loadEnergyCSV('call_scenario_summary_df.csv')                // NEW: voice call scenarios
+]).then(([shortVideoTable, longVideoTable, visioTable, othersTable,callTable]) => {
+  energyTable = [...shortVideoTable, ...longVideoTable, ...visioTable,...othersTable,...callTable];
   console.log(`✅ Total scenarios loaded: ${energyTable.length}`);
 });
 
@@ -85,12 +87,12 @@ app.post('/calculate', (req, res) => {
     const devKey   = deviceName.toLowerCase();
     const actKey   = activity.name.toLowerCase();
     const condKey  = condition.toLowerCase();
-    const netLower = network.toLowerCase();
+    let netLower = network.toLowerCase();
 
     const isStreaming = streamingApps.includes(actKey);
 
     //–– allow “4g” ⇄ “lte” synonyms
-    const netVariants = [netLower];
+    let netVariants = [netLower];
     if (netLower === '4g')      netVariants.push('lte');
     else if (netLower === 'lte') netVariants.push('4g');
   
@@ -102,12 +104,15 @@ app.post('/calculate', (req, res) => {
       if (isStreaming) {
         // Streaming → requires quality
         let quality = 'auto';
-        if (actKey === 'netflix') {
-          quality = 'eco';
-        } else if (actKey === 'amazon') {
-          quality = 'good';
-        } else if (actKey === 'youtube') {
-          quality = '720p';
+        if (activity.quality) {
+          quality = activity.quality.toLowerCase();
+        } else {
+          // fallback default
+          if (actKey === 'netflix')  quality = 'eco';
+          if (actKey === 'youtube')  quality = '720p';
+          if (actKey === 'amazon')   quality = 'good';
+          if (actKey === 'apple')    quality = 'auto';
+          if (actKey === 'disney')   quality = 'eco';
         }
         for (const nv of netVariants) {
           const key = `${devKey}_${nv}_${actKey}_${quality}_${condKey}`;
@@ -136,7 +141,41 @@ app.post('/calculate', (req, res) => {
           }
         }
 
-      } else {
+        } else if (activity.name.toLowerCase() === 'call') {
+            let voiceTech = activity.quality || 'VoLTE';  // Default to VoLTE if not explicitly provided
+
+            if (netLower === '3g') {
+                // Force UMTS if user selects 3G network
+                voiceTech = 'UMTS';
+            } else if (netLower === 'wifi') {
+                // VoWIFI over 4G fallback when using WiFi for voice calls
+                voiceTech = 'VoWIFI';
+                netVariants = ['4g']; // force lookup in 4G scenarios
+            }
+
+            // Try matching scenario for given device
+            for (const nv of netVariants) {
+                const key = `${devKey}_${nv}_${voiceTech}`;
+                scenarioKey = key;
+                match = energyTable.find(e =>
+                    e.scenario_id.toLowerCase() === key.toLowerCase()
+                );
+                if (match) break;
+            }
+
+            // Fallback to 6Pro if no match
+            if (!match) {
+                for (const nv of netVariants) {
+                    const key = `6pro_${nv}_${voiceTech}`;
+                    scenarioKey = key;
+                    match = energyTable.find(e =>
+                        e.scenario_id.toLowerCase() === key.toLowerCase()
+                    );
+                    if (match) break;
+                }
+            }
+        }
+ else {
         // Non-streaming → no quality
         for (const nv of netVariants) {
           const key = `${devKey}_${nv}_${actKey}_${condKey}`;

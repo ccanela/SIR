@@ -38,6 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const detailsSection = document.getElementById('details-section');
     const batteryInfoModal = document.getElementById('battery-details-modal');
     const batteryInfoBtn = document.getElementById('battery-info-btn');
+    
+    const qualityWrapper = document.getElementById('quality-wrapper');
+    const qualitySelect = document.getElementById('quality-select');
+    const callQualitySelect = document.getElementById('call-quality-select');
 
 
     let detailsVisible = false;
@@ -59,16 +63,41 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     activityCards.forEach(card => {
-        card.addEventListener('click', function() {
+        card.addEventListener('click', function () {
             activityCards.forEach(c => c.classList.remove('border-indigo-500', 'bg-indigo-50'));
             this.classList.add('border-indigo-500', 'bg-indigo-50');
+
             selectedActivity = {
                 name: this.dataset.activity,
                 category: this.dataset.category
             };
             selectedActivityEl.textContent = getActivityFullName(selectedActivity.name);
+            // Show call quality if it's a call
+
+            if (selectedActivity.name === 'call') {
+            callQualitySelect.classList.remove('hidden');
+            } else {
+            callQualitySelect.classList.add('hidden');
+            }
+
+            // Handle quality options
+            const qualityOptions = this.dataset.qualityOptions;
+            if (qualityOptions) {
+                const qualities = JSON.parse(qualityOptions);
+                qualitySelect.innerHTML = '';
+                qualities.forEach(q => {
+                    const opt = document.createElement('option');
+                    opt.value = q.toLowerCase();  // lowercase for matching backend
+                    opt.textContent = q;          // display as-is
+                    qualitySelect.appendChild(opt);
+                });
+                qualityWrapper.classList.remove('hidden');
+            } else {
+                qualityWrapper.classList.add('hidden');
+            }
         });
     });
+
 
     addActivityBtn.addEventListener('click', function() {
         if (!selectedActivity) return;
@@ -83,14 +112,24 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Pas de créneau disponible.');
             return;
         }
-
         const endTime = startTime + duration;
+
+        // Dynamically choose the right quality select input
+        let quality = undefined;
+        if (selectedActivity.name === 'call') {
+            const callSelect = document.getElementById('call-tech');
+            quality = callSelect?.value;
+        } else if (!qualityWrapper.classList.contains('hidden')) {
+            quality = qualitySelect?.value;
+        }
+
         plannedActivities.push({
             name: selectedActivity.name,
             category: selectedActivity.category,
             duration: duration,
             startTime: startTime,
-            endTime: endTime
+            endTime: endTime,
+            quality: quality
         });
 
         updateTimeline();
@@ -141,7 +180,8 @@ document.addEventListener('DOMContentLoaded', () => {
             activities: plannedActivities.map(a => ({
                 name: a.name,
                 duration: a.duration,
-                category: a.category
+                category: a.category,
+                quality: a.quality || null
             })),
             device: deviceType,
             network: networkType,
@@ -166,7 +206,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 list.innerHTML = '';
                 missing.forEach(m => {
                     const li = document.createElement('li');
-                    li.textContent = `${getActivityFullName(m.name)} - ${m.network.toUpperCase()} - ${m.mobility === 'moving' ? 'En déplacement' : 'Stationnaire'}`;
+                    let qualityInfo = m.quality ? ` - Qualité: ${m.quality}` : '';
+                    li.textContent = `${getActivityFullName(m.name)} - ${m.network.toUpperCase()} - ${m.mobility === 'moving' ? 'En déplacement' : 'Stationnaire'}${qualityInfo}`;
                     list.appendChild(li);
                 });
         
@@ -260,8 +301,11 @@ document.addEventListener('DOMContentLoaded', () => {
             block.style.backgroundColor = categoryColors[activity.category] || '#6366f1';
             block.style.left = `${(activity.startTime / sumDuration) * 100}%`;
             block.style.width = `${(activity.duration / sumDuration) * 100}%`;
-            if (activity.duration >= 5) block.textContent = `${getActivityShortName(activity.name)} (${activity.duration}min)`;
-
+            let label = `${getActivityShortName(activity.name)} (${activity.duration}min)`;
+            if (activity.quality) {
+                label = `${getActivityShortName(activity.name)} (${activity.quality})`;
+            }
+            block.textContent = label;
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'absolute top-0 right-0 bg-red-600 text-white p-1 rounded-bl-md opacity-0 hover:opacity-100 transition-opacity';
             deleteBtn.innerHTML = '×';
