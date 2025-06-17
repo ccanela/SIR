@@ -38,7 +38,7 @@ function loadEnergyCSV(filePath) {
 
 // Load both short video and streaming datasets
 Promise.all([
-  loadEnergyCSV('scenario_summary_df.csv'),                // short video apps
+  loadEnergyCSV('short_video_scenario_summary_df.csv'),                // short video apps
   loadEnergyCSV('video_streaming_scenario_summary_df.csv'),// long video apps
   loadEnergyCSV('visio_scenario_summary_df.csv'),           // visio apps
   loadEnergyCSV('others_scenario_summary_df.csv'),
