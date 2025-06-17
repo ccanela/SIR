@@ -40,9 +40,11 @@ function loadEnergyCSV(filePath) {
 Promise.all([
   loadEnergyCSV('scenario_summary_df.csv'),                // short video apps
   loadEnergyCSV('video_streaming_scenario_summary_df.csv'),// long video apps
-  loadEnergyCSV('visio_scenario_summary_df.csv')           // visio apps
-]).then(([shortVideoTable, longVideoTable, visioTable]) => {
-  energyTable = [...shortVideoTable, ...longVideoTable, ...visioTable];
+  loadEnergyCSV('visio_scenario_summary_df.csv'),           // visio apps
+  loadEnergyCSV('others_scenario_summary_df.csv'),
+  loadEnergyCSV('call_scenario_summary_df.csv')                // NEW: voice call scenarios
+]).then(([shortVideoTable, longVideoTable, visioTable, othersTable,callTable]) => {
+  energyTable = [...shortVideoTable, ...longVideoTable, ...visioTable,...othersTable,...callTable];
   console.log(`✅ Total scenarios loaded: ${energyTable.length}`);
 });
 
@@ -85,12 +87,12 @@ app.post('/calculate', (req, res) => {
     const devKey   = deviceName.toLowerCase();
     const actKey   = activity.name.toLowerCase();
     const condKey  = condition.toLowerCase();
-    const netLower = network.toLowerCase();
+    let netLower = network.toLowerCase();
 
     const isStreaming = streamingApps.includes(actKey);
 
     //–– allow “4g” ⇄ “lte” synonyms
-    const netVariants = [netLower];
+    let netVariants = [netLower];
     if (netLower === '4g')      netVariants.push('lte');
     else if (netLower === 'lte') netVariants.push('4g');
   
@@ -135,6 +137,36 @@ app.post('/calculate', (req, res) => {
             if (match) break;
           }
         }
+
+      } else if (activity.name.toLowerCase() === 'call') {
+          let voiceTech = activity.voiceTech || 'VoLTE';  // Default to VoLTE if not provided
+          if (netLower === '3g') {
+            voiceTech = "UMTS"
+          } else if (netLower === "wifi") {
+            // if the user wants to simulate a call using WiFi, we'll use the 4G to VoWiFi scenario
+            voiceTech = "VoWIFI"
+            netLower = "4g"
+            netVariants = ["4g"]
+          }
+          for (const nv of netVariants) {
+              const key = `${devKey}_${nv}_${voiceTech}`;
+              scenarioKey = key;
+              match = energyTable.find(e =>
+                e.scenario_id.toLowerCase() === key.toLowerCase()
+              );
+              if (match) break;
+          }
+          // Fallback to 6Pro if no match
+          if (!match) {
+            for (const nv of netVariants) {
+              const key = `6pro_${nv}_${voiceTech}`;
+              scenarioKey = key;
+              match = energyTable.find(e =>
+                e.scenario_id.toLowerCase() === key.toLowerCase()
+              );
+              if (match) break;
+            }
+          }
 
       } else {
         // Non-streaming → no quality
