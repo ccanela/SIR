@@ -1,57 +1,136 @@
 import pandas as pd
-from datetime import datetime
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
+import plotly.express as px
+import os
+from glob import glob
 
-# Load CSV
-df = pd.read_csv(r"data\Experiment_Data\SIR_Experiment\Reels\1_5_6pro_LTE_insta_Dyna_T1_Prefecture_INSA_64sps.csv")
+# 📂 Dossier contenant les CSVs
+folder = r"data\Experiment_Data\SIR_Experiment\Reels"
+files = glob(os.path.join(folder, "*LTE*_stat_*.csv"))  # LTE statique uniquement
 
-# Parse values from embedded column
-colunas_embutidas = ['V_BAT', 'I_BAT', 'P_BAT', 'V_BB', 'I_BB', 'P_BB', 'V_PA', 'I_PA', 'P_PA']
-df[colunas_embutidas] = df["V_BAT,I_BAT,P_BAT,V_BB,I_BB,P_BB,V_PA,I_PA,P_PA"].str.split(",", expand=True).astype(float)
+# Regroupement des fichiers par plateforme
+platform_files = {}
+for file in files:
+    name = os.path.basename(file).lower()
+    if 'insta' in name:
+        platform_files.setdefault('instagram', []).append(file)
+    elif 'tiktok' in name:
+        platform_files.setdefault('tiktok', []).append(file)
+    elif 'ytshorts' in name:
+        platform_files.setdefault('youtube shorts', []).append(file)
 
-# Parse timestamps
-df['timestamp'] = pd.to_datetime(df['Date'] + ' ' + df['Time'])
-df = df.sort_values('timestamp').reset_index(drop=True)
+# 📋 Affichage des fichiers sélectionnés
+print("📂 Fichiers utilisés par plateforme (LTE statique uniquement) :")
+for platform, f_list in platform_files.items():
+    print(f"  {platform} ({len(f_list)} fichiers):")
+    for f in f_list:
+        print(f"     └─ {os.path.basename(f)}")
 
-# Time deltas (in seconds)
-df['delta_t'] = df['timestamp'].diff().dt.total_seconds()
-df['delta_t'].iloc[0] = 0
+# ------------------------------------------------------------
+# 🔹 1. COURBES DE PUISSANCE RF LISSÉES (rolling mean)
+# ------------------------------------------------------------
+fig_rf = go.Figure()
+rolling_window = 100  # Taille de la fenêtre de moyennage (échantillons)
 
-# Power validation
-df["P_BAT_calc"] = df["V_BAT"] * df["I_BAT"]
-df["P_PA_calc"] = df["V_PA"] * df["I_PA"]
+for platform, file_list in platform_files.items():
+    for i, filepath in enumerate(file_list):
+        df = pd.read_csv(filepath)
+        df['timestamp'] = pd.to_datetime(df['Timestamp'])
 
-# Error metrics
-df["P_BAT_error_pct"] = (df["P_BAT_calc"] - df["P_BAT"]) / df["P_BAT"] * 100
-df["P_PA_error_pct"] = (df["P_PA_calc"] - df["P_PA"]) / df["P_PA"] * 100
+        # Extraction des colonnes RF : V_PA, I_PA
+        parts = df["V_BAT,I_BAT,P_BAT,V_BB,I_BB,P_BB,V_PA,I_PA,P_PA"].str.split(",", expand=True)
+        df['V_RF'] = parts[6].astype(float)
+        df['I_RF'] = parts[7].astype(float)
+        df['P_RF'] = df['V_RF'] * df['I_RF']
 
-# Energy in Joules and Wh
-df['energy_J'] = df['P_BAT'] * df['delta_t']
-df['cumulative_energy_Wh'] = df['energy_J'].cumsum() / 3600
+        df = df.sort_values('timestamp').reset_index(drop=True)
+        df['time_sec'] = (df['timestamp'] - df['timestamp'].iloc[0]).dt.total_seconds()
 
-total_energy_joules = df['energy_J'].sum()
-total_energy_wh = total_energy_joules / 3600
+        # Lissage
+        df['P_RF_smooth'] = df['P_RF'].rolling(window=rolling_window, center=True, min_periods=1).mean()
 
-print(f"Énergie totale consommée: {total_energy_wh:.4f} Wh")
+        trace_label = f"{platform.title()} #{i+1}" if len(file_list) > 1 else platform.title()
+        fig_rf.add_trace(go.Scatter(
+            x=df['time_sec'],
+            y=df['P_RF_smooth'],
+            mode='lines',
+            name=trace_label,
+            line=dict(width=1.5)
+        ))
 
-# ----------- Plotly Visualizations -----------
+fig_rf.update_layout(
+    title="Puissance RF lissée par plateforme (LTE statique)",
+    xaxis_title="Temps (s)",
+    yaxis_title="Puissance RF (W)",
+    template="plotly_white",
+    legend_title="Plateforme"
+)
+fig_rf.show()
 
-# 1. Power comparison (measured vs calculated)
-fig1 = go.Figure()
-fig1.add_trace(go.Scatter(x=df['timestamp'], y=df['P_BAT'], mode='lines', name='P_BAT mesurée (W)', line=dict(color='blue')))
-fig1.add_trace(go.Scatter(x=df['timestamp'], y=df['P_BAT_calc'], mode='lines', name='P_BAT calculée (V×I)', line=dict(color='orange', dash='dash')))
-fig1.update_layout(title="Puissance de la batterie dans le temps", xaxis_title="Temps", yaxis_title="Puissance (W)", template="plotly_white")
-fig1.show()
+# ------------------------------------------------------------
+# 🔹 2. BOX PLOT DES VALEURS INSTANTANÉES DE PUISSANCE RF
+# ------------------------------------------------------------
+rf_samples = []
 
-# 2. Cumulative energy consumption
-fig2 = go.Figure()
-fig2.add_trace(go.Scatter(x=df['timestamp'], y=df['cumulative_energy_Wh'], mode='lines+markers', name='Énergie cumulée (Wh)', line=dict(color='green')))
-fig2.update_layout(title="Énergie cumulée consommée dans le temps", xaxis_title="Temps", yaxis_title="Énergie (Wh)", template="plotly_white")
-fig2.show()
+for platform, file_list in platform_files.items():
+    for filepath in file_list:
+        df = pd.read_csv(filepath)
+        parts = df["V_BAT,I_BAT,P_BAT,V_BB,I_BB,P_BB,V_PA,I_PA,P_PA"].str.split(",", expand=True)
+        df['V_RF'] = parts[6].astype(float)
+        df['I_RF'] = parts[7].astype(float)
+        df['P_RF'] = df['V_RF'] * df['I_RF']
 
-# 3. Error percentage
-fig3 = go.Figure()
-fig3.add_trace(go.Scatter(x=df['timestamp'], y=df['P_BAT_error_pct'], mode='lines', name='Erreur P_BAT (%)', line=dict(color='red')))
-fig3.update_layout(title="Erreur relative entre P_BAT mesurée et calculée", xaxis_title="Temps", yaxis_title="Erreur (%)", template="plotly_white")
-fig3.show()
+        for val in df['P_RF'].dropna():
+            rf_samples.append({
+                "Plateforme": platform,
+                "Puissance RF (W)": val
+            })
+
+# Convertir en DataFrame
+rf_df = pd.DataFrame(rf_samples)
+
+# 📈 Boxplot
+fig_box = px.box(
+    rf_df,
+    x="Plateforme",
+    y="Puissance RF (W)",
+    points="all",
+    title="Distribution de la puissance RF instantanée (LTE statique)",
+    template="plotly_white",
+    color="Plateforme"
+)
+fig_box.show()
+
+# ------------------------------------------------------------
+# 🔹 3. STATISTIQUES DESCRIPTIVES PAR PLATEFORME
+# ------------------------------------------------------------
+stats = []
+
+for platform in rf_df['Plateforme'].unique():
+    subset = rf_df[rf_df['Plateforme'] == platform]['Puissance RF (W)']
+    stats.append({
+        'Plateforme': platform.title(),
+        'Moyenne (W)': subset.mean(),
+        'Médiane (W)': subset.median(),
+        'Écart-type (W)': subset.std(),
+        'Min (W)': subset.min(),
+        'Max (W)': subset.max()
+    })
+
+stats_df = pd.DataFrame(stats)
+
+# 📈 Boxplot statistique alternatif (si besoin, désactiver si redondant)
+fig_stats = px.box(
+    rf_df,
+    x='Plateforme',
+    y='Puissance RF (W)',
+    points="outliers",
+    title="Boîte à moustaches - RF par plateforme",
+    template="plotly_white",
+    color="Plateforme"
+)
+fig_stats.show()
+
+# 📋 Impression console
+print("\n📊 Statistiques RF par plateforme (LTE statique) :\n")
+print(stats_df.round(4).to_string(index=False))
