@@ -13,6 +13,8 @@ const categoryColors = {
     'autres': '#fbbf24'          // Yellow
 };
 
+const PORT = 5000
+
 // DOM Selectors
 document.addEventListener('DOMContentLoaded', () => {
     const durationButtons = document.querySelectorAll('.duration-btn');
@@ -187,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
             network: networkType,
             mobility: mobility
         };
-        fetch('http://localhost:5000/calculate', {
+        fetch(`http://localhost:${PORT}/calculate`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(payload)
