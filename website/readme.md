@@ -71,7 +71,6 @@ Chaque activité est représentée par une carte de ce type :
 <div class="activity-card"
      data-category="streaming"
      data-activity="netflix"
-     data-consumption="0.5"
      data-quality-options='["Eco", "Max"]'
      draggable="true">
   <!-- contenu visuel -->
@@ -84,3 +83,32 @@ Attributs importants :
 - `data-category` : catégorie visuelle et logique (streaming, communication, short-video, visio, autres) — elle définit la couleur.
 
  - `data-quality-options (optionnel)` : active une liste déroulante pour les qualités vidéo ou audio.
+
+
+### Étape 2 :  Ajouter les noms dans `script.js`
+Dans le fichier `script.js`, les noms doivent être ajoutés dans deux fonctions pour que l’affichage soit correct dans les résultats :
+
+```bash
+function getActivityFullName(name) {
+  const map = {
+    'netflix': 'Netflix',
+    'tiktok': 'TikTok',
+    'spotify': 'Spotify',
+    'deezer': 'Deezer'  // ← Ajouter ici
+    };
+  return map[name] || name;
+}
+```
+
+```bash
+function getActivityShortName(name) {
+  const map = {
+    'netflix': 'Netflix',
+    'tiktok': 'TikTok',
+    'spotify': 'Spotify',
+    'deezer': 'Deezer'  // ← Ajouter ici
+  };
+  return map[name] || name;
+}
+```
+
