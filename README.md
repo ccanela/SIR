@@ -18,12 +18,12 @@ Le projet propose un **simulateur web** permettant de :
 
 ---
 
-## 🧪 Contexte technique
+## Contexte technique
 
-- 📲 **Téléphones instrumentés** : accès physique aux lignes d'alimentation internes.
-- ⚡ **Capteurs PAC1954** connectés à un Raspberry Pi.
-- 📊 **Scénarios réels** enregistrés pour divers réseaux, applications, et situations (mobilité).
-- 🗂️ Données disponibles :
+- **Téléphones instrumentés** : accès physique aux lignes d'alimentation internes.
+- **Capteurs PAC1954** connectés à un Raspberry Pi.
+- **Scénarios réels** enregistrés pour divers réseaux, applications, et situations (mobilité).
+- Données disponibles :
   - énergie consommée par la batterie (`E_BAT_Jm`) ;
   - consommation module RF (`E_RF_Jm`), BaseBand processor (`E_BB_Jm`) et Power Amplifier (`E_PA_Jm`) ;
   - spécifications des appareils (capacité batterie, taille écran).
@@ -55,7 +55,7 @@ SIR/
 └── ...
 
 ```
-## ⚙️ Fonctionnement de l’API
+## Fonctionnement de l’API
 Le backend `/server.js` :
 
 -> lit les fichiers CSV de scénarios (scenario_summary_df.csv) et specifications des appareils (batteries_ue.csv) ;
