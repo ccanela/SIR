@@ -118,7 +118,7 @@ C'est l'étape la plus importante. Vous devez fournir les données de consommati
 Les lignes de ce fichier CSV doivent contenir un scenario_id qui correspondra à ce que le serveur génère.
 Exemple de scenario_id pour Deezer avec qualité "Haute" (optionnel), sur un Pixel 6 Pro en 4G et stationnaire : 6pro_lte_spotify_haute_stat.
 
->>Si l'activité a une logique de construction de scenario_id particulière (comme les appels), vous devrez l'ajouter dans la route `/calculate`. Sinon, la logique par défaut devrait fonctionner.
+>Si l'activité a une logique de construction de scenario_id particulière (comme les appels), vous devrez l'ajouter dans la route `/calculate`. Sinon, la logique par défaut devrait fonctionner.
 
 
 
