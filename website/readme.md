@@ -16,6 +16,7 @@ Ce projet est une **application web interactive** permettant de simuler l'impact
 
 ## 🧱 Structure du projet
 
+```bash
 SIR/
 │
 ├── website/              # Interface utilisateur (HTML, CSS, JS)
@@ -26,7 +27,7 @@ SIR/
 ├── server/              # API backend Express.js
 │   └── server.js        # Endpoint /calculate pour les estimations
 │   └── fichiers csv     # Données de consommation énergétique
-
+```
 
 ---
 
@@ -41,11 +42,13 @@ SIR/
 1. **Installer les dépendances**
 ```bash
 npm install express cors body-parser csv-parser
+```
 
 2. **Lancer le serveur**
 ```bash
 cd server
 node server.js
+```
 
 3. **Ouvrir l'interface utilisateur**
 Ouvrir `website/index.html` dans un navigateur web.
