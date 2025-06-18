@@ -63,6 +63,7 @@ Localisez la section suivante dans le HTML :
 
 ```html
 <div id="activities-container">
+```
 
 Chaque activité est représentée par une carte de ce type :
 
@@ -75,6 +76,7 @@ Chaque activité est représentée par une carte de ce type :
      draggable="true">
   <!-- contenu visuel -->
 </div>
+```
 
 Attributs importants :
 - `data-activity` : identifiant unique utilisé côté backend (ex: netflix, call, etc.).
