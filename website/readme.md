@@ -1,10 +1,10 @@
-# 📱 Simulateur de Consommation Énergétique Mobile
+# Simulateur de Consommation Énergétique Mobile
 
 Ce projet est une **application web interactive** permettant de simuler l'impact énergétique de différentes activités numériques effectuées sur un smartphone. Elle est basée sur des données expérimentales mesurées sur du matériel réel dans le cadre du projet ECOMOME.
 
 ---
 
-## 🌐 Fonctionnalités principales
+## Fonctionnalités principales
 
 - Sélection d’un appareil mobile, technologie réseau et état de mobilité.
 - Choix d’activités (TikTok, appels, YouTube, etc.) à placer dans une timeline.
@@ -14,7 +14,7 @@ Ce projet est une **application web interactive** permettant de simuler l'impact
 
 ---
 
-## 🧱 Structure du projet
+## Structure du projet
 
 ```bash
 SIR/
@@ -31,7 +31,7 @@ SIR/
 
 ---
 
-## 🚀 Lancer l'application
+## Lancer l'application
 
 ### Prérequis
 - Node.js (v16 ou +)
@@ -55,7 +55,8 @@ Ouvrir `website/index.html` dans un navigateur web.
 
 ---
 
-## 🔧 Ajouter ou modifier des activités
+## Ajouter ou modifier des activités
+Suivez ces étapes pour ajouter, par exemple, une activité "Deezer".
 
 ### Étape 1 : Modifier `index.html`
 
@@ -111,4 +112,13 @@ function getActivityShortName(name) {
   return map[name] || name;
 }
 ```
+
+### Étape 3 : Fournir les données dans `server/`
+C'est l'étape la plus importante. Vous devez fournir les données de consommation pour "Deezer". Vous pouvez soit créer un nouveau fichier deezer_scenario_summary_df.csv, soit ajouter les données à others_scenario_summary_df.csv'Les fichiers CSV peuvent se générer avec des Jupyter Notebooks.
+Les lignes de ce fichier CSV doivent contenir un scenario_id qui correspondra à ce que le serveur génère.
+Exemple de scenario_id pour Deezer avec qualité "Haute" (optionnel), sur un Pixel 6 Pro en 4G et stationnaire : 6pro_lte_spotify_haute_stat.
+
+>>Si l'activité a une logique de construction de scenario_id particulière (comme les appels), vous devrez l'ajouter dans la route `/calculate`. Sinon, la logique par défaut devrait fonctionner.
+
+
 
