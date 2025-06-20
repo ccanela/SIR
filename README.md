@@ -102,3 +102,46 @@ Ce dossier est un submodule Git. Pour l'initialiser :
 cd data/Experiment_Data
 git submodule update --init --recursive
 git pull origin master
+
+
+Traitement des données brutes dans le notebook
+
+Les fichier *_processing.ipynb automatisent le traitement des mesures réelles à partir de CSV de mesures. Pour traiter de nouveaux fichiers :
+
+Ajouter des fichiers à traiter :
+
+Placez vos fichiers .csv dans un dossier sous ./data/Experiment_Data/...
+
+Le notebook scanne automatiquement les sous-dossiers (ex: Reels, Voice call)
+
+Ajouter un fichier à la blacklist :
+
+Si un fichier est bruité ou incorrect, ajoutez son nom au set blacklist_filenames dans le notebook :
+blacklist_filenames = {
+  "2_5_6pro_LTE_YTshorts_stat_64sps.csv",
+  # Ajouter ici...
+}
+
+Chaque fichier notebook de traitement des données est composé de deux blocs :
+
+1. Bloc de traitement des données : jouer ce bloc pour traiter les données de mesures. Retourne une table result_df qui contient toutes les métriques importantes : énergies moyennes (J/min), durée utile, % RF, etc.
+
+2. Bloc d'export : Ce bloc génère un fichier de la forme *_scenario_summary_df : contient les consomations moyennes par scénario ID, sauvegardée dans un CSV utilisé par le serveur.
+
+Ajouter un nouveau scénario de simulation
+
+Ajouter le fichier CSV de mesure dans un sous-dossier de data/Experiment_Data/
+
+Mettre à jour le notebook processing_ready.ipynb, en ajoutant le nouveau dossier parmi ceux traités par le fichier
+
+Exécuter la cellule principale (boucle for) pour ajouter ce fichier au result_df. Le notebook ne traite pas les fichiers déjà traités et ajoutés à result_df
+
+Ré executer le bloc de generation du scenario summary. Le serveur peut maintenant accéder au nouveau scénario traité.
+
+Données de mesure (Git submodule)
+
+Les fichiers de mesure sont dans le dépôt suivant :
+https://gitlab.inria.fr/youssef.badra/Experiment_Data
+
+cd data/Experiment_Data
+git submodule update --init --recursive
