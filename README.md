@@ -65,3 +65,38 @@ Le backend `/server.js` :
 -> calcule l’énergie consommée (Wh), le % de batterie utilisé et le CO₂ émis (min–max) ;
 
 -> renvoie les résultats au frontend.
+
+Exécuter le projet : 
+1. Lancer le serveur
+Ouvrir un terminal et se rendre dans le dossier website/server :
+cd website/server
+Installer les dépendances (si ce n’est pas déjà fait) :
+npm install
+Puis lancer le serveur avec :
+node server.js
+Par défaut, le serveur écoute sur le port 5000.
+2. Lancer le client
+Dans un deuxième terminal, se rendre dans le dossier website/client :
+cd website/client
+Lancer le client avec :
+npx serve
+Cette commande démarre un serveur local pour héberger la page HTML. Le terminal vous indiquera sur quelle adresse le site est accessible, généralement :
+http://localhost:3000
+Le site est maintenant opérationnel.
+Vous pouvez :
+Sélectionner un appareil, un réseau et une mobilité.
+Planifier des activités (streaming, visio, appels, etc.).
+Obtenir l’estimation de la consommation énergétique et du pourcentage de batterie utilisé.
+
+
+Obtenir les données de mesure : 
+
+Les fichiers de données sont compris dans le Git ci-dessous : 
+
+https://gitlab.inria.fr/youssef.badra/Experiment_Data
+
+Ce dossier est un submodule Git. Pour l'initialiser :
+
+cd data/Experiment_Data
+git submodule update --init --recursive
+git pull origin master
