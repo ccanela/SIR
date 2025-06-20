@@ -1,4 +1,4 @@
-# 📱 SIR 
+# SIR 
 
 > Projet SIR – INSA Lyon  
 > 4TCA – 2024-2025  
@@ -6,9 +6,9 @@
 
 ---
 
-## 🎯 Objectif général
+## Objectif général
 
-Le projet **SIR** s’inscrit dans le programme **ECOMOME**, visant à mieux comprendre l’impact énergétique réel des smartphones et à sensibiliser le public. Contrairement aux approches par modélisation théorique, **des mesures matérielles réelles** sont ici utilisées, à partir de téléphones modifiés.
+Ce projet **SIR** vise à mieux comprendre l’impact énergétique réel des smartphones et à sensibiliser le public. Contrairement aux approches par modélisation théorique, **des mesures matérielles réelles** sont ici utilisées, à partir de téléphones modifiés.
 
 Le projet propose un **simulateur web** permettant de :
 - construire des scénarios d’usage (streaming, appel, navigation, etc.) ;
@@ -18,19 +18,19 @@ Le projet propose un **simulateur web** permettant de :
 
 ---
 
-## 🧪 Contexte technique
+## Contexte technique
 
-- 📲 **Téléphones instrumentés** : accès physique aux lignes d'alimentation internes.
-- ⚡ **Capteurs PAC1954** connectés à un Raspberry Pi.
-- 📊 **Scénarios réels** enregistrés pour divers réseaux, applications, et situations (mobilité).
-- 🗂️ Données disponibles :
+- **Téléphones instrumentés** : accès physique aux lignes d'alimentation internes.
+- **Capteurs PAC1954** connectés à un Raspberry Pi.
+- **Scénarios réels** enregistrés pour divers réseaux, applications, et situations (mobilité).
+- Données disponibles :
   - énergie consommée par la batterie (`E_BAT_Jm`) ;
-  - consommation module RF (`E_RF_Jm`), ... (`E_BB_Jm`) et .... (`E_PA_Jm`) ;
-  - spécifications des appareils (capacité batterie, taille écran…).
+  - consommation module RF (`E_RF_Jm`), BaseBand processor (`E_BB_Jm`) et Power Amplifier (`E_PA_Jm`) ;
+  - spécifications des appareils (capacité batterie, taille écran).
 
 ---
 
-## 🧱 Structure du projet
+## Structure du projet
 
 ```bash
 SIR/
@@ -40,12 +40,14 @@ SIR/
 │   ├── style.css        # Feuilles de style personnalisées
 │   └── script.js        # Logique front-end interactive
 │
-├── server/              # API backend Express.js
-│   └── server.js        # Endpoint /calculate pour les estimations
-│
-├── data/                # Fichiers CSV de mesure et de spécifications
-│   ├── scenario_summary_df.csv
-│   └── batteries_ue.csv
+├── server/                                    # API backend Express.js
+│   └── server.js                              # Endpoint /calculate pour les estimations
+│   ├── other_scenario_summary_df.csv          # Données scenarios catégorie "Autre"
+│   └── call_scenario_summary.csv              # Données scenarios appel téléphonique
+│   └── short_video_scenario_summary.csv       # Données  scenarios catégorie "Short Videos"
+│   └── video_streaming_scenario_summary.csv   # Données  scenarios catégorie "Videostreaming"
+│   └── visio_scenario_summary.csv             # Données  scenarios catégorie "Visioconférence"
+│   └── batteries_ue.csv                       # Spécifications différents appareils
 │
 ├── processing_ready.ipynb  # Notebook de préparation et traitement des données
 ├── result_df.csv           # Résultats énergétiques formatés
@@ -53,7 +55,7 @@ SIR/
 └── ...
 
 ```
-## ⚙️ Fonctionnement de l’API
+## Fonctionnement de l’API
 Le backend `/server.js` :
 
 -> lit les fichiers CSV de scénarios (scenario_summary_df.csv) et specifications des appareils (batteries_ue.csv) ;
